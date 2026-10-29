@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F3EA">
+<title>命理题库自测 · 160 题</title>
+<meta name="description" content="基于 MingLi-Bench 的命理题库自测：全球算命师大赛 2022–2025 年 160 道真题，逐题作答、即时对答案。">
+<style>
+  :root{
+    --paper:#F7F3EA; --card:#FFFDF8; --ink:#221F1A; --ink-2:#6C6458; --ink-3:#9A9285;
+    --line:#E4DACA; --line-strong:#D3C6B2;
+    --cinnabar:#A6402C; --cinnabar-soft:#F6E6E1;
+    --jade:#2F6B57; --jade-soft:#E4EFE9;
+    --gold:#B08A3E;
+    --radius:16px;
+    --serif:"Songti SC","STSong","Noto Serif SC","Source Han Serif SC",Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:var(--sans); color:var(--ink); background:var(--paper);
+    background-image:
+      radial-gradient(900px 500px at 8% -8%, rgba(176,138,62,.10), transparent 62%),
+      radial-gradient(700px 420px at 105% 4%, rgba(166,64,44,.07), transparent 60%);
+    background-attachment:fixed;
+    min-height:100vh; line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{max-width:680px;margin:0 auto;padding:22px 18px calc(28px + env(safe-area-inset-bottom))}
+  .hidden{display:none !important}
+
+  /* ---------- 通用 ---------- */
+  .eyebrow{font-size:11px;letter-spacing:.22em;color:var(--ink-3);text-transform:uppercase}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 8px 22px -18px rgba(60,45,25,.5)}
+  .btn{
+    appearance:none;border:1px solid var(--ink);background:var(--ink);color:#FBF7EF;
+    font-family:var(--sans);font-size:15px;font-weight:600;letter-spacing:.04em;
+    padding:14px 22px;border-radius:999px;cursor:pointer;transition:transform .12s ease,opacity .12s ease;
+  }
+  .btn:active{transform:scale(.985)}
+  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+  .btn.primary{background:var(--cinnabar);border-color:var(--cinnabar)}
+  .btn.block{display:block;width:100%}
+  .btn:disabled{opacity:.35;cursor:not-allowed}
+
+  /* ---------- 首页 ---------- */
+  .hero{padding:26px 4px 18px}
+  .seal{
+    display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;
+    background:var(--cinnabar);color:#FBEFE9;font-family:var(--serif);font-size:19px;letter-spacing:.02em;
+    box-shadow:0 2px 10px -4px rgba(166,64,44,.6);margin-bottom:16px;
+  }
+  h1{font-family:var(--serif);font-weight:600;font-size:30px;line-height:1.25;margin:0 0 10px;letter-spacing:.01em}
+  .lede{color:var(--ink-2);font-size:14.5px;margin:0;max-width:33em}
+  .lede b{color:var(--ink);font-weight:600}
+  .stat-row{display:flex;gap:10px;margin:20px 0 6px}
+  .stat{flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 13px}
+  .stat .v{font-family:var(--serif);font-size:21px;line-height:1.2}
+  .stat .l{font-size:11px;color:var(--ink-3);letter-spacing:.08em;margin-top:3px}
+
+  .setup{margin-top:20px;padding:20px 18px 18px}
+  .field{margin-bottom:20px}
+  .field:last-child{margin-bottom:0}
+  .field-label{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+  .field-label span:first-child{font-size:13px;font-weight:600;letter-spacing:.03em}
+  .field-label span:last-child{font-size:11.5px;color:var(--ink-3)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    appearance:none;border:1px solid var(--line-strong);background:var(--card);color:var(--ink-2);
+    font-family:var(--sans);font-size:13.5px;padding:9px 15px;border-radius:999px;cursor:pointer;
+    transition:all .14s ease;min-width:56px;
+  }
+  .chip:active{transform:scale(.97)}
+  .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#FBF7EF;font-weight:600}
+  .hint{font-size:12px;color:var(--ink-3);margin-top:9px;line-height:1.55}
+  .start-wrap{margin-top:22px}
+
+  .footnote{margin-top:22px;font-size:11.5px;color:var(--ink-3);line-height:1.7}
+  .footnote a{color:var(--ink-2);text-decoration:underline;text-underline-offset:2px}
+
+  /* ---------- 答题 ---------- */
+  .topbar{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .topbar .back{
+    appearance:none;border:1px solid var(--line-strong);background:transparent;color:var(--ink-2);
+    width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px;line-height:1;flex:none;
+  }
+  .progress{flex:1;height:4px;background:var(--line);border-radius:99px;overflow:hidden}
+  .progress > i{display:block;height:100%;width:0;background:var(--cinnabar);border-radius:99px;transition:width .3s ease}
+  .counter{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums;flex:none}
+
+  .qcard{padding:20px 18px 18px}
+  .meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .tag{font-size:11px;letter-spacing:.06em;color:var(--ink-2);background:#F1EADC;border:1px solid var(--line);border-radius:6px;padding:3px 8px}
+  .tag.year{color:var(--gold);border-color:#E9DBC0;background:#FBF3E3}
+  .tag.cat{color:#6B4C3E;background:#F7EAE2;border-color:#EFD8CB}
+
+  .birth{font-family:var(--serif);font-size:15.5px;line-height:1.7;color:var(--ink);margin-bottom:12px}
+  .birth .lk{color:var(--ink-3);font-family:var(--sans);font-size:12px;margin-right:6px;letter-spacing:.06em}
+
+  details.chart{border:1px solid var(--line);border-radius:12px;background:#FBF7ED;margin-bottom:18px;overflow:hidden}
+  details.chart > summary{
+    list-style:none;cursor:pointer;padding:10px 14px;font-size:12.5px;color:var(--ink-2);
+    display:flex;align-items:center;justify-content:space-between;user-select:none;
+  }
+  details.chart > summary::-webkit-details-marker{display:none}
+  details.chart > summary .cv{color:var(--ink-3);font-size:11.5px;letter-spacing:.06em}
+  .chart-body{padding:2px 14px 14px;border-top:1px solid var(--line)}
+  .bazi{display:flex;flex-wrap:nowrap;gap:5px;margin:12px 0 10px}
+  .pillar{flex:1 1 0;min-width:0;text-align:center;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:7px 2px;overflow:hidden}
+  .pillar .gz{font-family:var(--serif);font-size:15.5px;letter-spacing:.04em;white-space:nowrap}
+  .pillar .lb{font-size:10.5px;color:var(--ink-3);margin-top:2px}
+  .chart-meta{font-size:12px;color:var(--ink-2);margin-bottom:10px}
+  .palaces{display:grid;grid-template-columns:1fr 1fr;gap:5px 14px}
+  .pal{display:flex;gap:6px;font-size:12px;line-height:1.6}
+  .pal b{font-weight:600;color:var(--ink);flex:none;width:34px}
+  .pal span{color:var(--ink-2)}
+
+  .stem{font-family:var(--serif);font-size:19px;line-height:1.55;margin:0 0 16px;letter-spacing:.01em}
+  .options{display:flex;flex-direction:column;gap:9px}
+  .opt{
+    display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;
+    appearance:none;background:var(--card);border:1px solid var(--line-strong);border-radius:12px;
+    padding:13px 14px;font-family:var(--sans);font-size:14.5px;line-height:1.55;color:var(--ink);
+    cursor:pointer;transition:border-color .14s ease,background .14s ease,transform .1s ease;
+  }
+  .opt:active{transform:scale(.995)}
+  .opt .k{
+    flex:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--line-strong);
+    display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:600;color:var(--ink-2);margin-top:1px;
+  }
+  .opt .t{flex:1}
+  .opt .mk{font-size:12px;flex:none;margin-top:3px;opacity:0}
+  .opt:hover:not(.locked){border-color:var(--ink-3)}
+  .opt.locked{cursor:default}
+  .opt.correct{border-color:var(--jade);background:var(--jade-soft)}
+  .opt.correct .k{border-color:var(--jade);background:var(--jade);color:#fff}
+  .opt.correct .mk{opacity:1;color:var(--jade)}
+  .opt.wrong{border-color:var(--cinnabar);background:var(--cinnabar-soft)}
+  .opt.wrong .k{border-color:var(--cinnabar);background:var(--cinnabar);color:#fff}
+  .opt.wrong .mk{opacity:1;color:var(--cinnabar)}
+  .opt.dim{opacity:.5}
+
+  .verdict{margin-top:16px;font-size:13.5px;line-height:1.7;padding:12px 14px;border-radius:10px;display:none}
+  .verdict.show{display:block}
+  .verdict.ok{background:var(--jade-soft);color:#245244;border:1px solid #CFE2D9}
+  .verdict.no{background:var(--cinnabar-soft);color:#7E2F20;border:1px solid #EFD3CA}
+  .verdict b{font-weight:700}
+
+  .next-wrap{margin-top:18px}
+  .kbd-hint{text-align:center;font-size:11px;color:var(--ink-3);margin-top:10px}
+
+  /* ---------- 结果 ---------- */
+  .result-head{text-align:center;padding:26px 18px 22px}
+  .ring{width:150px;height:150px;margin:0 auto 8px;position:relative}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring .val .p{font-family:var(--serif);font-size:36px;line-height:1}
+  .ring .val .s{font-size:11px;color:var(--ink-3);letter-spacing:.1em;margin-top:6px}
+  .verdict-line{font-family:var(--serif);font-size:18px;margin:12px 0 6px}
+  .verdict-sub{font-size:13px;color:var(--ink-2);margin:0}
+  .result-stats{display:flex;gap:10px;margin-top:18px}
+  .result-stats .stat{text-align:center}
+
+  .section-title{display:flex;align-items:baseline;justify-content:space-between;margin:26px 2px 12px}
+  .section-title h2{font-family:var(--serif);font-size:16px;font-weight:600;margin:0}
+  .section-title span{font-size:11.5px;color:var(--ink-3)}
+
+  .cat-row{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:13px}
+  .cat-row .nm{width:44px;flex:none;color:var(--ink-2)}
+  .cat-row .bar{flex:1;height:6px;background:var(--line);border-radius:99px;overflow:hidden}
+  .cat-row .bar i{display:block;height:100%;background:var(--jade);border-radius:99px;opacity:.8}
+  .cat-row .num{width:66px;flex:none;text-align:right;font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+  .review{border-top:1px solid var(--line)}
+  .rev{padding:15px 2px;border-bottom:1px solid var(--line)}
+  .rev .q{font-family:var(--serif);font-size:14.5px;line-height:1.6;margin-bottom:8px}
+  .rev .revbirth{font-size:11.5px;color:var(--ink-3);line-height:1.5;margin-bottom:8px}
+  .rev .ans{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px}
+  .rev .ans .yours{color:var(--cinnabar)}
+  .rev .ans .right{color:var(--jade)}
+  .rev .meta{margin:0 0 8px}
+  .empty{font-size:13px;color:var(--ink-3);padding:18px 0;text-align:center}
+
+  .result-actions{display:flex;gap:10px;margin-top:24px}
+  .result-actions .btn{flex:1}
+
+  .toast{
+    position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,12px);
+    background:var(--ink);color:#FBF7EF;font-size:12.5px;padding:9px 16px;border-radius:999px;
+    opacity:0;pointer-events:none;transition:all .22s ease;z-index:50;white-space:nowrap;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  @media (min-width:721px){
+    .app{padding-top:34px}
+    h1{font-size:34px}
+    .qcard{padding:24px 24px 22px}
+  }
+  @media (max-width:360px){
+    .palaces{grid-template-columns:1fr}
+    .pal b{width:40px}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ 首页 ============ -->
+  <section id="setup">
+    <div class="hero">
+      <div class="seal">命</div>
+      <div class="eyebrow">MingLi Bench · Self Test</div>
+      <h1>命理题库自测</h1>
+      <p class="lede">全球算命师大赛 <b>2022–2025</b> 年真题，共 <b>160 道</b>四选一。逐题作答、即时对答案，最后看分类正确率。命盘可随时展开，当练手，也当对照。</p>
+      <div class="stat-row">
+        <div class="stat"><div class="v">160</div><div class="l">题目</div></div>
+        <div class="stat"><div class="v">32</div><div class="l">命例</div></div>
+        <div class="stat"><div class="v">25%</div><div class="l">随机基线</div></div>
+      </div>
+    </div>
+
+    <div class="card setup">
+      <div class="field">
+        <div class="field-label"><span>题目年份</span><span id="poolCount">共 160 题</span></div>
+        <div class="chips" id="yearChips">
+          <button class="chip" data-year="all" aria-pressed="true">全部</button>
+          <button class="chip" data-year="2022" aria-pressed="false">2022</button>
+          <button class="chip" data-year="2023" aria-pressed="false">2023</button>
+          <button class="chip" data-year="2024" aria-pressed="false">2024</button>
+          <button class="chip" data-year="2025" aria-pressed="false">2025</button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label"><span>本局题量</span><span>随机抽取</span></div>
+        <div class="chips" id="sizeChips">
+          <button class="chip" data-size="10" aria-pressed="true">10 题</button>
+          <button class="chip" data-size="20" aria-pressed="false">20 题</button>
+          <button class="chip" data-size="40" aria-pressed="false">40 题</button>
+          <button class="chip" data-size="all" aria-pressed="false">全部</button>
+        </div>
+        <div class="hint" id="sizeHint">约 5 分钟。想认真推演可以选少一点，每题多花点时间。</div>
+      </div>
+      <div class="start-wrap">
+        <button class="btn primary block" id="startBtn">开始作答</button>
+      </div>
+    </div>
+
+    <p class="footnote">
+      题目与标准答案来自 <a href="https://github.com/DestinyLinker/MingLi-Bench" target="_blank" rel="noopener">MingLi-Bench</a>（MIT），原始赛题出自全球算命师大赛；命盘由 iztro 预先排出，未做真太阳时校正，海外出生者请留意时辰偏差。本页仅作自测练习，不构成任何预测或建议。
+    </p>
+  </section>
+
+  <!-- ============ 答题 ============ -->
+  <section id="quiz" class="hidden">
+    <div class="topbar">
+      <button class="back" id="quitBtn" aria-label="结束本局">✕</button>
+      <div class="progress"><i id="progressBar"></i></div>
+      <div class="counter" id="counter">1 / 10</div>
+    </div>
+
+    <div class="card qcard">
+      <div class="meta" id="qMeta"></div>
+      <div class="birth"><span class="lk">命主</span><span id="birthText"></span></div>
+      <details class="chart" id="chartBox">
+        <summary><span>排盘 · 八字 / 紫微</span><span class="cv" id="chartToggle">展开</span></summary>
+        <div class="chart-body" id="chartBody"></div>
+      </details>
+      <p class="stem" id="stem"></p>
+      <div class="options" id="options"></div>
+      <div class="verdict" id="verdict"></div>
+      <div class="next-wrap">
+        <button class="btn block" id="nextBtn" disabled>下一题</button>
+      </div>
+      <div class="kbd-hint">键盘 1–4 选答，Enter 继续</div>
+    </div>
+  </section>
+
+  <!-- ============ 结果 ============ -->
+  <section id="result" class="hidden">
+    <div class="card result-head">
+      <div class="ring">
+        <svg width="150" height="150" viewBox="0 0 150 150" aria-hidden="true">
+          <circle cx="75" cy="75" r="64" fill="none" stroke="#E4DACA" stroke-width="9"/>
+          <circle id="ringArc" cx="75" cy="75" r="64" fill="none" stroke="#2F6B57" stroke-width="9"
+                  stroke-linecap="round" stroke-dasharray="402.1" stroke-dashoffset="402.1"
+                  style="transition:stroke-dashoffset 1s ease"/>
+        </svg>
+        <div class="val"><div class="p" id="scorePct">0%</div><div class="s">正确率</div></div>
+      </div>
+      <div class="verdict-line" id="verdictLine"></div>
+      <p class="verdict-sub" id="verdictSub"></p>
+      <div class="result-stats">
+        <div class="stat"><div class="v" id="statRight">0</div><div class="l">答对</div></div>
+        <div class="stat"><div class="v" id="statWrong">0</div><div class="l">答错</div></div>
+        <div class="stat"><div class="v" id="statBase">25%</div><div class="l">随机基线</div></div>
+      </div>
+    </div>
+
+    <div class="section-title"><h2>分类正确率</h2><span id="catNote"></span></div>
+    <div class="card" style="padding:12px 16px" id="catList"></div>
+
+    <div class="section-title"><h2>错题回顾</h2><span id="revNote"></span></div>
+    <div class="card" style="padding:4px 16px" id="reviewList"></div>
+
+    <div class="result-actions">
+      <button class="btn ghost" id="copyBtn">复制成绩</button>
+      <button class="btn primary" id="againBtn">再来一局</button>
+    </div>
+    <div style="height:6px"></div>
+  </section>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const DATA = {"items":[{"i":"ftb_0001","y":2022,"n":1,"c":"case_1","g":"男命：1974年4月28日下午4:40分 出生地点：usa","q":"此命1996年发生何事？","o":["患上严重抑郁痴","回港认识现任妻子","交通意外，撞车，人平安","得到一笔意外之财"],"a":"A","k":"健康"},{"i":"ftb_0002","y":2022,"n":2,"c":"case_1","g":"男命：1974年4月28日下午4:40分 出生地点：usa","q":"此命何年结婚？","o":["1999","2002","2006","到2022年为止，单身"],"a":"C","k":"婚姻"},{"i":"ftb_0003","y":2022,"n":3,"c":"case_1","g":"男命：1974年4月28日下午4:40分 出生地点：usa","q":"此命2008年发生何事？","o":["买卖股票，输了很多钱","与朋友合作生意，赚了很多钱","祖母过世，自己生病，要一段时间长期食药","交通意外，发现有遗传病"],"a":"C","k":"健康"},{"i":"ftb_0004","y":2022,"n":4,"c":"case_1","g":"男命：1974年4月28日下午4:40分 出生地点：usa","q":"此命父亲是那一年仙逝？","o":["2009","2013","2018","2020"],"a":"C","k":"家庭"},{"i":"ftb_0005","y":2022,"n":5,"c":"case_1","g":"男命：1974年4月28日下午4:40分 出生地点：usa","q":"此命2020年发生何事？","o":["工作升职得财","因长期食药，导致健康出问题","此年太太怀孕，得子","因病逝世"],"a":"B","k":"健康"},{"i":"ftb_0006","y":2022,"n":6,"c":"case_2","g":"女命：阳历1981年5月26日凌晨02:17 出生地点：中国香港","q":"此命的学历如何？","o":["中七毕业","2002年升学内地，2006年大学毕业","预科后升本地大学，2004年大学毕业","中五后，1998年出国留学"],"a":"B","k":"学业"},{"i":"ftb_0007","y":2022,"n":7,"c":"case_2","g":"女命：阳历1981年5月26日凌晨02:17 出生地点：中国香港","q":"这命何时候结婚？","o":["2005年结婚","2006年先签纸结婚，2007年摆酒","2012年结婚，旅行外地签纸","2009年结婚"],"a":"B","k":"婚姻"},{"i":"ftb_0008","y":2022,"n":8,"c":"case_2","g":"女命：阳历1981年5月26日凌晨02:17 出生地点：中国香港","q":"此命有一名女儿于何年出生？","o":["2007年","2009年","2012年","2015年"],"a":"A","k":"子女"},{"i":"ftb_0009","y":2022,"n":9,"c":"case_2","g":"女命：阳历1981年5月26日凌晨02:17 出生地点：中国香港","q":"身材？","o":["高挑，瘦削","高挑，肥胖","矮小，瘦削","矮小，肥胖"],"a":"D","k":"外貌"},{"i":"ftb_0010","y":2022,"n":10,"c":"case_2","g":"女命：阳历1981年5月26日凌晨02:17 出生地点：中国香港","q":"父母情况？","o":["1988年父母离异，随母亲成长","1999年父亲出现婚外情，直至2009年父亲离开母亲，但没有离婚","2000年父亲出现婚外情，2021年父母离婚","2003年父母离婚,父亲再婚同年生一子"],"a":"B","k":"家庭"},{"i":"ftb_0011","y":2022,"n":11,"c":"case_3","g":"女命（佩小姐）：1990年05月23日17：30 出生地点：中国大陆","q":"女生和父母、兄弟姐妹的关系如何？","o":["从小父母疼爱呵护，兄弟姐妹关系融洽","从小父母疼爱呵护，兄弟姐妹关系淡薄","小时不在父母身边长大，吃百家饭，兄弟姐妹关系融洽","小时不在父母身边长大，吃百家饭，兄弟姐妹关系淡薄"],"a":"D","k":"家庭"},{"i":"ftb_0012","y":2022,"n":12,"c":"case_3","g":"女命（佩小姐）：1990年05月23日17：30 出生地点：中国大陆","q":"佩小姐目前的工作情况和生活情况如何？","o":["在事业单位/国企上班，有几十万存款，生活稳定","在家全职太太，老公赚钱养家","自我经营做老板，有负债","在普通公司里打工，月光族"],"a":"C","k":"事业"},{"i":"ftb_0013","y":2022,"n":13,"c":"case_3","g":"女命（佩小姐）：1990年05月23日17：30 出生地点：中国大陆","q":"这位女士佩的婚姻仔女如何？","o":["未婚，没孩子","已婚，没孩子","已婚，有孩子","离异，有孩子"],"a":"D","k":"婚姻"},{"i":"ftb_0014","y":2022,"n":14,"c":"case_3","g":"女命（佩小姐）：1990年05月23日17：30 出生地点：中国大陆","q":"佩小姐在下面哪一年的工作有新的突破发展？","o":["2014年","2016年","2018年","2021年"],"a":"C","k":"事业"},{"i":"ftb_0015","y":2022,"n":15,"c":"case_3","g":"女命（佩小姐）：1990年05月23日17：30 出生地点：中国大陆","q":"以下描述中比较符合佩小姐是什么？","o":["自私自利，喜欢向别人索取，易怒，蛮横无理","外冷内热，习惯付出，耳根子软不善拒绝，被家人压榨欺负","外柔内刚，很有主见，善于表面一套背地里一套，交际能手","强势固执，猜忌多疑，不喜欢外出，孤僻没朋友"],"a":"B","k":"性格"},{"i":"ftb_0016","y":2022,"n":16,"c":"case_4","g":"女命：公历1977年10月26日11时10分 出生地点：malaysia","q":"命主现在的职业是什么？","o":["家庭主妇","秘书","自己做生意","公关行业"],"a":"A","k":"事业"},{"i":"ftb_0017","y":2022,"n":17,"c":"case_4","g":"女命：公历1977年10月26日11时10分 出生地点：malaysia","q":"命主2008年发生何事？","o":["签字结婚","换工作","开公司做生意","车祸"],"a":"A","k":"婚姻"},{"i":"ftb_0018","y":2022,"n":18,"c":"case_4","g":"女命：公历1977年10月26日11时10分 出生地点：malaysia","q":"离婚何时？","o":["2010","2013","2016","2018"],"a":"B","k":"婚姻"},{"i":"ftb_0019","y":2022,"n":19,"c":"case_4","g":"女命：公历1977年10月26日11时10分 出生地点：malaysia","q":"命主在2016年发生何事？","o":["堕胎","得了一笔横财","移民外国","升职加薪"],"a":"A","k":"健康"},{"i":"ftb_0020","y":2022,"n":20,"c":"case_4","g":"女命：公历1977年10月26日11时10分 出生地点：malaysia","q":"命主在2009年发生什么？","o":["被打劫","买产业","生病住院","父亲去世"],"a":"D","k":"家庭"},{"i":"ftb_0021","y":2022,"n":21,"c":"case_5","g":"男命：公历1985年6月29日18时32分（酉时）出生地点：malaysia","q":"以下哪一段描述最符合命主个性？","o":["谨慎小心，从不冒险","脾气暴躁， 自暴自弃","先斩后奏，闯祸后就逃避","苦口婆心， 啰啰嗦嗦"],"a":"A","k":"性格"},{"i":"ftb_0022","y":2022,"n":22,"c":"case_5","g":"男命：公历1985年6月29日18时32分（酉时）出生地点：malaysia","q":"问命主在几时结婚？（公历）","o":["2017年3月","2019年11月","至今未婚","2018年6月"],"a":"B","k":"婚姻"},{"i":"ftb_0023","y":2022,"n":23,"c":"case_5","g":"男命：公历1985年6月29日18时32分（酉时）出生地点：malaysia","q":"2009年发生何事？","o":["和黑道人物的女人发生关系，被追杀","和朋友创业，被股东诈骗","中彩票，获得十数万现金","发生车祸受重伤，在医院数月"],"a":"B","k":"事业"},{"i":"ftb_0024","y":2022,"n":24,"c":"case_5","g":"男命：公历1985年6月29日18时32分（酉时）出生地点：malaysia","q":"前半年的2022发生什么事情？","o":["创业并获得巨额融资","犯下刑事罪被告上法庭","父亲受伤进医院","工作上立大功被提拔成管理层"],"a":"C","k":"家庭"},{"i":"ftb_0025","y":2022,"n":25,"c":"case_5","g":"男命：公历1985年6月29日18时32分（酉时）出生地点：malaysia","q":"请命主的学历如何？","o":["大学/大专毕业","中学/高中毕业","专业技术学校毕业","小学未读完就辍学"],"a":"B","k":"学业"},{"i":"ftb_0026","y":2022,"n":26,"c":"case_6","g":"男命：公历1983年11月1日（亥时） 出生地点：中国台湾","q":"这个人的爱情问题如何？","o":["单身，曾交往几任却都无疾而终","有稳定交往多年对象，但仍未婚","曾有一段婚姻，但于2021年离婚","已婚，家庭幸福且育有一子"],"a":"A","k":"婚姻"},{"i":"ftb_0027","y":2022,"n":27,"c":"case_6","g":"男命：公历1983年11月1日（亥时） 出生地点：中国台湾","q":"命主学历及工作为何？","o":["只有高职毕业，在市场摆摊赚钱","大学毕业，目前在小公司当助理","硕士毕业，大学担任高级研究员","博士毕业，上市公司担任工程师"],"a":"D","k":"学业"},{"i":"ftb_0028","y":2022,"n":28,"c":"case_6","g":"男命：公历1983年11月1日（亥时） 出生地点：中国台湾","q":"命主曾被骗钱，请问在何时？","o":["2014年","2018年","2019年","2021年"],"a":"D","k":"财运"},{"i":"ftb_0029","y":2022,"n":29,"c":"case_6","g":"男命：公历1983年11月1日（亥时） 出生地点：中国台湾","q":"命主个性及特色原因？","o":["精神亢奋常坐不住，像个过动儿","经常运动，体力好且有强健体魄","喜好交友，但真心朋友寥寥无几","待人和善且严以律己，寛以待人"],"a":"C","k":"性格"},{"i":"ftb_0030","y":2022,"n":30,"c":"case_6","g":"男命：公历1983年11月1日（亥时） 出生地点：中国台湾","q":"命主理财能力如何？","o":["虽赚的不多，但很会理财，已购置一栋房子","很没理财观念，赚的钱皆由母亲代为管理","家境优渥，是个很会乱花钱的富二代","相当投机，赚的钱几乎都投入股市，但赚少赔多"],"a":"B","k":"财运"},{"i":"ftb_0031","y":2022,"n":31,"c":"case_7","g":"女命公历1984年12月9日（酉时） 出生地点：中国香港","q":"此命之性格？","o":["勤俭顾家，知书识礼，明辨是非","好勇争胜，说话霸气，说胜才止","心多贪权，急于求成，见困难挫折而离弃","胆小怕事，心气压抑，欠缺当机立断心志"],"a":"D","k":"性格"},{"i":"ftb_0032","y":2022,"n":32,"c":"case_7","g":"女命公历1984年12月9日（酉时） 出生地点：中国香港","q":"此命祖上富，因父好赌，何年破产？","o":["1995","1997","2003","2007"],"a":"C","k":"家庭"},{"i":"ftb_0033","y":2022,"n":33,"c":"case_7","g":"女命公历1984年12月9日（酉时） 出生地点：中国香港","q":"何年在牢狱几个月？","o":["2003","2007","2010","2016"],"a":"A","k":"健康"},{"i":"ftb_0034","y":2022,"n":34,"c":"case_7","g":"女命公历1984年12月9日（酉时） 出生地点：中国香港","q":"此命于2005年拍拖，于何年结婚？","o":["2008","2010","2012","2014"],"a":"C","k":"婚姻"},{"i":"ftb_0035","y":2022,"n":35,"c":"case_7","g":"女命公历1984年12月9日（酉时） 出生地点：中国香港","q":"此命的感情生活情况？","o":["夫妻恩爱，而且一心一意，夫妻同心照顾孩子","丈夫外有情人，但家用充足，命主在家照顾孩子，后离婚","丈夫不给家用更有情人，命主只好打工照顾孩子，后离婚","丈夫生意失败而离家出走，只好打工帮丈夫还债及照顾孩子"],"a":"B","k":"婚姻"},{"i":"ftb_0036","y":2022,"n":36,"c":"case_8","g":"男命公历1981年6月17日（戌时）出生地点：中国香港","q":"命主出生时的家庭环境如何？","o":["家境错误","不过不失","小康之家","富裕家庭"],"a":"C","k":"家庭"},{"i":"ftb_0037","y":2022,"n":37,"c":"case_8","g":"男命公历1981年6月17日（戌时）出生地点：中国香港","q":"命主的婚姻状况？","o":["仍然单身","同居生活","已婚","已离婚"],"a":"C","k":"婚姻"},{"i":"ftb_0038","y":2022,"n":38,"c":"case_8","g":"男命公历1981年6月17日（戌时）出生地点：中国香港","q":"命在2014年曾接受手术，手术器官？","o":["心脏","脑部","双腿","手肘"],"a":"B","k":"健康"},{"i":"ftb_0039","y":2022,"n":39,"c":"case_8","g":"男命公历1981年6月17日（戌时）出生地点：中国香港","q":"命主职业是？","o":["保险从业员","零售业","文员","的士司机"],"a":"A","k":"事业"},{"i":"ftb_0040","y":2022,"n":40,"c":"case_8","g":"男命公历1981年6月17日（戌时）出生地点：中国香港","q":"命主2020/2021年的经济状况是？","o":["月光族","欠下债务","薄有积蓄","财务自由"],"a":"B","k":"财运"},{"i":"ftb_0041","y":2023,"n":41,"c":"case_9","g":"女命：西历1966年10月18日夜晚23:15香港出生","q":"此命的性格特徵如何？","o":["急性子，容易被别人影响决定，表达能力差，对朋友豪爽","喜欢投诉，常说自己苦，易发脾气，不易信人","贪财好胜，权力欲重，固执己见，喜命令别人","贪生怕死，不懂交际，少说法多做事，守财节俭"],"a":"B","k":"性格"},{"i":"ftb_0042","y":2023,"n":42,"c":"case_9","g":"女命：西历1966年10月18日夜晚23:15香港出生","q":"那个行业合乎此命情况？","o":["律师","销售员","地产生意","图书馆文员"],"a":"C","k":"事业"},{"i":"ftb_0043","y":2023,"n":43,"c":"case_9","g":"女命：西历1966年10月18日夜晚23:15香港出生","q":"此命叔叔是出家人，于那年跳楼亡？","o":["1982","1984","1986","1988"],"a":"B","k":"家庭"},{"i":"ftb_0044","y":2023,"n":44,"c":"case_9","g":"女命：西历1966年10月18日夜晚23:15香港出生","q":"此命到现在的婚姻情况如何与及其学历？","o":["单身，从未结过婚，没有子女。大学毕业","已婚，有子女，正常普通家庭。大学毕业","已离婚，没有子女。没有大学毕业","同性恋，有女朋友，有一养女，没有大学毕业"],"a":"A","k":"婚姻"},{"i":"ftb_0045","y":2023,"n":45,"c":"case_9","g":"女命：西历1966年10月18日夜晚23:15香港出生","q":"2008年到现在，那个合乎其命运情况？","o":["移民新加坡，半炒股半退休的休閒富裕生活","叔叔死后多年的保险法律完结，得保险金而富裕在香港生活","酒后开车，意外撞死人，坐过多年牢。虽有自己私楼，平民生活","突然全身多病，四处求医而医不好，风光过一时的生活，转变为穷困疗倒，住公屋"],"a":"D","k":"健康"},{"i":"ftb_0046","y":2023,"n":46,"c":"case_10","g":"男命：西历1962年8月6日已时-农历1962七月初七/巳时","q":"命主16岁前家庭状况？","o":["跟随母亲生活","在孤儿院长大","跟随父亲生活","跟随收养父母生活"],"a":"A","k":"家庭"},{"i":"ftb_0047","y":2023,"n":47,"c":"case_10","g":"男命：西历1962年8月6日已时-农历1962七月初七/巳时","q":"命主父母状况？","o":["父母相继在儿时离世","父亲短寿，母亲长寿","家境贫穷，父母无法养育命主而分离","父亲长寿，母亲短寿"],"a":"B","k":"家庭"},{"i":"ftb_0048","y":2023,"n":48,"c":"case_10","g":"男命：西历1962年8月6日已时-农历1962七月初七/巳时","q":"命主婚姻状况？","o":["已婚，但已离异","一直独身，清心寡欲","独身，经常嫖妓","已婚，婚姻生活稳定"],"a":"B","k":"婚姻"},{"i":"ftb_0049","y":2023,"n":49,"c":"case_10","g":"男命：西历1962年8月6日已时-农历1962七月初七/巳时","q":"2014年，命主发生何事？","o":["命主伴侣患癌症","命主兄弟姐妹中有人患癌症","命主父亲或母亲患癌症","命主自己患癌症"],"a":"D","k":"健康"},{"i":"ftb_0050","y":2023,"n":50,"c":"case_10","g":"男命：西历1962年8月6日已时-农历1962七月初七/巳时","q":"以下那一项，在命主中反映才属正确？","o":["独子，没有兄弟姐妹","曾犯事，留有案底","长期患病，需要人照顾","工作稳定，毕业后一份工作做到退休"],"a":"D","k":"事业"},{"i":"ftb_0051","y":2023,"n":51,"c":"case_11","g":"男命：西历1986年4月24日晚上9.30亥时","q":"命主在那一年结婚？","o":["2012","2013","2015","2016"],"a":"D","k":"婚姻"},{"i":"ftb_0052","y":2023,"n":52,"c":"case_11","g":"男命：西历1986年4月24日晚上9.30亥时","q":"命主有两名男孩，分别在那年出生？","o":["2013与2015","2014与2016","2016与2019","2017与2022"],"a":"D","k":"子女"},{"i":"ftb_0053","y":2023,"n":53,"c":"case_11","g":"男命：西历1986年4月24日晚上9.30亥时","q":"命主目前的财运？","o":["身家超过千万身家（马币）","收入平平，固定薪金4千薪水","财运顺畅，每月收入都有增长","欠债超过1千万的债务"],"a":"C","k":"财运"},{"i":"ftb_0054","y":2023,"n":54,"c":"case_11","g":"男命：西历1986年4月24日晚上9.30亥时","q":"命主目前婚姻感情状况？","o":["己离婚","己婚，但是有婚外情","婚姻美满","未婚，但己有两名孩子"],"a":"C","k":"婚姻"},{"i":"ftb_0055","y":2023,"n":55,"c":"case_11","g":"男命：西历1986年4月24日晚上9.30亥时","q":"命主目前职业？","o":["小吃店老板","寿板店职员","偏门老板","命理风水顾问"],"a":"D","k":"事业"},{"i":"ftb_0056","y":2023,"n":56,"c":"case_12","g":"男命，西历1956年3月11日巳时，malaysia出生","q":"命主性格如何？","o":["自私，贪心，好色","胆小，怕事，没主见","内向，沉默寡言","外向胆大好胜，急性子"],"a":"C","k":"性格"},{"i":"ftb_0057","y":2023,"n":57,"c":"case_12","g":"男命，西历1956年3月11日巳时，malaysia出生","q":"命主学历如何？","o":["小学毕业","中学辍学","大学毕业","硕士毕业"],"a":"A","k":"学业"},{"i":"ftb_0058","y":2023,"n":58,"c":"case_12","g":"男命，西历1956年3月11日巳时，malaysia出生","q":"命主婚姻状况？","o":["已婚，无儿女","已婚，育2男1女","早年结婚，晚年离婚","未婚"],"a":"A","k":"婚姻"},{"i":"ftb_0059","y":2023,"n":59,"c":"case_12","g":"男命，西历1956年3月11日巳时，malaysia出生","q":"命主在1997年发生何事?","o":["接获诈骗电话，骗走百万存款","发生严重车祸，昏迷3个月","与友人合伙投资，出国寻二战后宝藏","自创业，开办大型港式酒家"],"a":"C","k":"事业"},{"i":"ftb_0060","y":2023,"n":60,"c":"case_12","g":"男命，西历1956年3月11日巳时，malaysia出生","q":"命主身体健康状况？","o":["2011年血管阻塞，轻微中风","2013年心脏搭桥手术","2016年确诊癌症，隔年与世长辞","2020年确诊新冠，肺部感染死亡"],"a":"C","k":"健康"},{"i":"ftb_0061","y":2023,"n":61,"c":"case_13","g":"女命：西历1978年04月05日17：00-19：00酉时  台湾生","q":"命主在2011年发生什么事？","o":["成立公司","拿到usa永久绿卡","投资获利千万","什么事情都没有发生"],"a":"B","k":"事业"},{"i":"ftb_0062","y":2023,"n":62,"c":"case_13","g":"女命：西历1978年04月05日17：00-19：00酉时  台湾生","q":"以下事项，哪个在2009年没有发生？","o":["考上律师","远距离旅行","找到工作","购置不动产"],"a":"C","k":"事业"},{"i":"ftb_0063","y":2023,"n":63,"c":"case_13","g":"女命：西历1978年04月05日17：00-19：00酉时  台湾生","q":"命主何时结婚？","o":["2006","2007","2008","2009"],"a":"C","k":"婚姻"},{"i":"ftb_0064","y":2023,"n":64,"c":"case_13","g":"女命：西历1978年04月05日17：00-19：00酉时  台湾生","q":"命主在哪一年生孩子？","o":["生于阳历2012期间","生于阳历2013期间","生于阳历2015期间","生于阳历2018期间"],"a":"B","k":"子女"},{"i":"ftb_0065","y":2023,"n":65,"c":"case_13","g":"女命：西历1978年04月05日17：00-19：00酉时  台湾生","q":"生产状况为？","o":["男婴","女婴","双胞胎","难产"],"a":"B","k":"子女"},{"i":"ftb_0066","y":2023,"n":66,"c":"case_14","g":"女命：西历1958-10-27辰时生  台湾人","q":"请问以下哪年命主以女性服装设计师身份出名大旺，收到各路明星邀请设计衣服?","o":["1983","1984","1985","1986"],"a":"C","k":"事业"},{"i":"ftb_0067","y":2023,"n":67,"c":"case_14","g":"女命：西历1958-10-27辰时生  台湾人","q":"请问以下哪年命主通灵，晚上梦到各路神明来报六合彩号码(台湾早年的地下博弈)她跟她大姐说，她姐赚到上千万台币横发买房?","o":["1987","1989","1990","1992"],"a":"A","k":"财运"},{"i":"ftb_0068","y":2023,"n":68,"c":"case_14","g":"女命：西历1958-10-27辰时生  台湾人","q":"请问以下哪年命主因为老公上班不稳定决定自行创业开店，开店后发现小孩翘课说谎在店里打小孩？","o":["1991","1992","1993","1994"],"a":"C","k":"事业"},{"i":"ftb_0069","y":2023,"n":69,"c":"case_14","g":"女命：西历1958-10-27辰时生  台湾人","q":"请问以下哪年命主忽然赚到大钱，受不了孩子抱怨，决定买房解决孩子读书的通勤问题?","o":["1996年","2003年","2005年","2008年"],"a":"C","k":"财运"},{"i":"ftb_0070","y":2023,"n":70,"c":"case_14","g":"女命：西历1958-10-27辰时生  台湾人","q":"请问以下哪年命主发现长久的乳房硬块转变为乳癌，检查后开刀十分顺利，平安无事？","o":["2008年","2010年","2016年","2022年"],"a":"D","k":"健康"},{"i":"ftb_0071","y":2023,"n":71,"c":"case_15","g":"女命：西历2002年6月1日早上08:30辰时  出生于香港","q":"此命出身的贫或富？","o":["孤儿院长大","贫穷家庭出身","小康之家出身","大富贵家庭出身"],"a":"B","k":"家庭"},{"i":"ftb_0072","y":2023,"n":72,"c":"case_15","g":"女命：西历2002年6月1日早上08:30辰时  出生于香港","q":"此命的学历/教育程度如何？","o":["大学毕业","正在修读硕士/研究生","小学毕业","中六毕业"],"a":"D","k":"学业"},{"i":"ftb_0073","y":2023,"n":73,"c":"case_15","g":"女命：西历2002年6月1日早上08:30辰时  出生于香港","q":"以上那一年份有拍拖/恋爱？","o":["2018年","2019年","2020年","以上时间都有男朋友"],"a":"C","k":"婚姻"},{"i":"ftb_0074","y":2023,"n":74,"c":"case_15","g":"女命：西历2002年6月1日早上08:30辰时  出生于香港","q":"2022年在姻缘方面如何?","o":["结婚","奉子成婚","离婚","分手"],"a":"D","k":"婚姻"},{"i":"ftb_0075","y":2023,"n":75,"c":"case_15","g":"女命：西历2002年6月1日早上08:30辰时  出生于香港","q":"2022年命主发生什么大事？","o":["事业上有好机遇，参加比赛得奖","在日本成为一位名侦探","母亲急病逝世","有横财运，中六合彩头奖"],"a":"A","k":"事业"},{"i":"ftb_0076","y":2023,"n":76,"c":"case_16","g":"男命：西历1980年7月11日已时  香港出生","q":"命主第一次结婚在那一年？","o":["2000年","2001年","2005年","2006年"],"a":"C","k":"婚姻"},{"i":"ftb_0077","y":2023,"n":77,"c":"case_16","g":"男命：西历1980年7月11日已时  香港出生","q":"命主第二次结婚在那一年？","o":["2011年","2012年","2013年","2015年"],"a":"C","k":"婚姻"},{"i":"ftb_0078","y":2023,"n":78,"c":"case_16","g":"男命：西历1980年7月11日已时  香港出生","q":"命主从事那个职业？","o":["秘书","物流公司老闆","翻译员","游泳救生员"],"a":"B","k":"事业"},{"i":"ftb_0079","y":2023,"n":79,"c":"case_16","g":"男命：西历1980年7月11日已时  香港出生","q":"命主性格特徵？","o":["被动，做事消极，但爱心和同情心重？","鬼主意多，做事喜欢走捷径，耍小聪明","保守，节俭，但承担力强","脾气暴燥，好色，做事鲁莽"],"a":"B","k":"性格"},{"i":"ftb_0080","y":2023,"n":80,"c":"case_16","g":"男命：西历1980年7月11日已时  香港出生","q":"命主在丙戌大运的财政状况？(2009--2018)","o":["丙戌大运一直财政稳定，有存款和房产，生活无忧","丙戌大运一直财政很好，常常在投资物业或股票上屡见丰厚获利","丙戌大运刚开始时财政丰盛，但后来因为赌钱而债台高筑","丙戌大运刚开始时平稳渡过，但后来因为要为家人清还债务而负债累累"],"a":"D","k":"财运"},{"i":"ftb_0081","y":2024,"n":81,"c":"case_17","g":"女命：1980年8月24日下午16:30 广东","q":"下列哪一个描述符合命主的出身状况？","o":["出身贫穷，家庭借贷度日，导致经常欠债。","出身普通，虽不捉襟见肘，可惜盈余不多。","出身中产，父为专业人士，家庭颇有盈余。","出身大富，父母经商有道，家族颇多地产。"],"a":"B","k":"家庭"},{"i":"ftb_0082","y":2024,"n":82,"c":"case_17","g":"女命：1980年8月24日下午16:30 广东","q":"下列哪一项描述了合命主要的学业状况？","o":["只有小学程度学历。","只有中学程度学历。","拥有大学程度学历。","拥有硕士程度学历。"],"a":"B","k":"学业"},{"i":"ftb_0083","y":2024,"n":83,"c":"case_17","g":"女命：1980年8月24日下午16:30 广东","q":"下列哪一项描述了主要的配偶工作状况？","o":["配偶是打工仔一名，普通职级收入，对家庭没有助力。","配偶是打工仔一名，中高职级收入，对家庭很有助力。","配偶经商，败多于成，颇多外债，对家庭没有助力。","配偶经商，成多于败，颇有盈余，对家庭很有助力。"],"a":"D","k":"婚姻"},{"i":"ftb_0084","y":2024,"n":84,"c":"case_17","g":"女命：1980年8月24日下午16:30 广东","q":"下列哪一项描述了合命主的子息状况？","o":["没有子女，因身体不能生育。","有三女一子。","只有一子，2004甲申年出生。","只有一女，2010庚寅年出生。"],"a":"C","k":"子女"},{"i":"ftb_0085","y":2024,"n":85,"c":"case_17","g":"女命：1980年8月24日下午16:30 广东","q":"在2022年壬寅年，下列哪一项是命主的婚姻经历？","o":["命主之前已有外遇，2022年被丈夫发现，但得到丈夫原谅，至今未离婚。","命主之前已有外遇，2022年被丈夫发现，得不到丈夫原谅，当年离婚。","丈夫之前已有外遇，2022年被命主发现，但得到命主原谅，至今未离婚。","丈夫之前已有外遇，2022年被命主发现，得不到命主原谅，当年离婚。"],"a":"C","k":"婚姻"},{"i":"ftb_0086","y":2024,"n":86,"c":"case_18","g":"男性：生于公元1972年1月8日午时，农历辛亥11月22日午时。于潮汕地区出生。","q":"命主的性格和情绪？","o":["孤僻、不合群、忧郁。","戇直、表里如一。有暴力倾向。","为人儒雅，爱虫鱼书画之乐。","乐于交际。独处之时，又自得其乐。"],"a":"D","k":"性格"},{"i":"ftb_0087","y":2024,"n":87,"c":"case_18","g":"男性：生于公元1972年1月8日午时，农历辛亥11月22日午时。于潮汕地区出生。","q":"命主的男女关系和婚姻状况？","o":["一生未娶。","已娶妻。关系良好，未见有异。","于虚龄24至33期间娶妻。但因妻子过于情绪化，而影响了感情。","于虚龄34至43娶妻。但婚后不久，妻即离世。"],"a":"C","k":"婚姻"},{"i":"ftb_0088","y":2024,"n":88,"c":"case_18","g":"男性：生于公元1972年1月8日午时，农历辛亥11月22日午时。于潮汕地区出生。","q":"命主事业上的特色？","o":["承继了兄长的畜牧场。","曾任公务员。但因涉嫌刑事案件，而要提早退休。","建筑工人。","成功商人，以零售起家。"],"a":"D","k":"事业"},{"i":"ftb_0089","y":2024,"n":89,"c":"case_18","g":"男性：生于公元1972年1月8日午时，农历辛亥11月22日午时。于潮汕地区出生。","q":"命主的母亲于哪年离世？","o":["1989","1990","2011","2021"],"a":"C","k":"家庭"},{"i":"ftb_0090","y":2024,"n":90,"c":"case_18","g":"男性：生于公元1972年1月8日午时，农历辛亥11月22日午时。于潮汕地区出生。","q":"命主于虚龄34至43岁的田宅运？","o":["通过买卖房产而得厚利。","获分配到公屋。","落了订金购买自住物业后，因未能成功获得银行贷款，而被卖家没收订金。","因投资失利，而要卖屋偿还债务。"],"a":"A","k":"财运"},{"i":"ftb_0091","y":2024,"n":91,"c":"case_19","g":"男命：1961年12月30日 02:00丑","q":"大约那段时间，运程最好？","o":["23---32岁","33---42岁","43---52岁","53---62岁"],"a":"B","k":"运势"},{"i":"ftb_0092","y":2024,"n":92,"c":"case_19","g":"男命：1961年12月30日 02:00丑","q":"什么时候结婚？","o":["23—32岁","33—42岁","43—52岁","没有结婚"],"a":"A","k":"婚姻"},{"i":"ftb_0093","y":2024,"n":93,"c":"case_19","g":"男命：1961年12月30日 02:00丑","q":"有官非刑事出现的时间吗？","o":["13---22岁","23---32岁","33---42岁","43---53岁"],"a":"B","k":"官非"},{"i":"ftb_0094","y":2024,"n":94,"c":"case_19","g":"男命：1961年12月30日 02:00丑","q":"有凶劫之灾出现的时间？","o":["1965年4岁","1968年7岁","1971年10岁","1974年13岁"],"a":"A","k":"灾劫"},{"i":"ftb_0095","y":2024,"n":95,"c":"case_19","g":"男命：1961年12月30日 02:00丑","q":"哪一个，破财最严重？","o":["23---32岁","33---42岁","43---52岁","53---62岁"],"a":"C","k":"财运"},{"i":"ftb_0096","y":2024,"n":96,"c":"case_19","g":"男命：1961年12月30日 02:00丑","q":"命主有夫妻，目前是第几段婚姻？","o":["第1段","第2段","第3段","失婚"],"a":"B","k":"婚姻"},{"i":"ftb_0097","y":2024,"n":97,"c":"case_20","g":"女命：1983年10月28日丑时农历：癸亥年九月二十三丑时。","q":"第一段婚姻什么时候结婚？","o":["2003","2005","2007","2009"],"a":"A","k":"婚姻"},{"i":"ftb_0098","y":2024,"n":98,"c":"case_20","g":"女命：1983年10月28日丑时农历：癸亥年九月二十三丑时。","q":"命主第一段婚姻的原因是？","o":["奉子成婚","长辈逝世,为冲喜结婚","商业利益,家族联婚","缺家庭关怀,随便找人嫁"],"a":"A","k":"婚姻"},{"i":"ftb_0099","y":2024,"n":99,"c":"case_20","g":"女命：1983年10月28日丑时农历：癸亥年九月二十三丑时。","q":"命主那一年结束了第一段婚姻？","o":["2011搬离, 2012结束","2013搬离,2014结束","2015搬离,2016结束","2017搬离,2018结束"],"a":"D","k":"婚姻"},{"i":"ftb_0100","y":2024,"n":100,"c":"case_20","g":"女命：1983年10月28日丑时农历：癸亥年九月二十三丑时。","q":"婚姻终止的原因。","o":["受丈夫暴力对待","命主暴力对待丈夫","半斤八两,互殴","丈夫逝世"],"a":"A","k":"婚姻"},{"i":"ftb_0101","y":2024,"n":101,"c":"case_21","g":"坤命：西元1971年4月12日申時生，出生地區：中國","q":"命主在哪一年結婚？","o":["1998","1999","2002","2003"],"a":"B","k":"婚姻"},{"i":"ftb_0102","y":2024,"n":102,"c":"case_21","g":"坤命：西元1971年4月12日申時生，出生地區：中國","q":"命主在哪一年结婚离婚？","o":["2010","2017","2018","没有离婚"],"a":"A","k":"婚姻"},{"i":"ftb_0103","y":2024,"n":103,"c":"case_21","g":"坤命：西元1971年4月12日申時生，出生地區：中國","q":"命主工作收入大概如何？","o":["年薪不足50万新台币","年薪过50万新台币","年薪过100万新台币","年薪过150万新台币"],"a":"C","k":"事业"},{"i":"ftb_0104","y":2024,"n":104,"c":"case_21","g":"坤命：西元1971年4月12日申時生，出生地區：中國","q":"命主名下拥有房产吗？","o":["有一间公寓","有二间公寓","有三间公寓","没有房产"],"a":"B","k":"财运"},{"i":"ftb_0105","y":2024,"n":105,"c":"case_21","g":"坤命：西元1971年4月12日申時生，出生地區：中國","q":"命主在哪一年意外大腿骨折？","o":["1998年","2010年","2018年","2022年"],"a":"B","k":"健康"},{"i":"ftb_0106","y":2024,"n":106,"c":"case_22","g":"女命：公元1983年3月26日未时，农历1983癸亥年，二月十二日，未时生，北京出世。","q":"1998年开始-1999年结束的感情对象类型，分手原因？","o":["高富帅，冷酷。分手原因-冷暴力，消失不见。","矮帅，学渣。分手原因-花女人钱，爱PUA。","书呆子，学霸。分手原因-太爱批评。","痞子，学渣。分手原因-脚踏两船"],"a":"B","k":"婚姻"},{"i":"ftb_0107","y":2024,"n":107,"c":"case_22","g":"女命：公元1983年3月26日未时，农历1983癸亥年，二月十二日，未时生，北京出世。","q":"1999年恋爱，2002年分手。","o":["高富帅，热心体贴。分手原因，命主外遇。","长相普通，善良。分手原因，家庭反对。","肥壮，大男子主义。分手原因，控制欲过强。","瘦高，胆小怕事。分手原因，毕业后异地发展而分手。"],"a":"A","k":"婚姻"},{"i":"ftb_0108","y":2024,"n":108,"c":"case_22","g":"女命：公元1983年3月26日未时，农历1983癸亥年，二月十二日，未时生，北京出世。","q":"2002年认识，大學師兄。","o":["富二代，玩世不恭。离婚原因，对方花心出轨。","帅气，聪明有才。离婚原因，吵架多，命主离家修行。","高大，大男人主义。离婚原因，婚后为钱吵架，家暴。","矮帅，多金。离婚原因，命主出轨。"],"a":"B","k":"婚姻"},{"i":"ftb_0109","y":2024,"n":109,"c":"case_22","g":"女命：公元1983年3月26日未时，农历1983癸亥年，二月十二日，未时生，北京出世。","q":"2012-2013之间，发生了一件严重的事，遇到一个桃花帮助了自己？","o":["误入歧途，被骗去外地工作，某暧昧同事把自己救出去。","投资失误，欠了几百万，某暧昧富豪，借钱给自己渡过难关。","严重意外导致无法工作，对自己有意思的大叔给自己生活费。","遇到宗教老千，倾家荡产，某暧昧富豪提供了自己金钱帮助。"],"a":"D","k":"财运"},{"i":"ftb_0110","y":2024,"n":110,"c":"case_22","g":"女命：公元1983年3月26日未时，农历1983癸亥年，二月十二日，未时生，北京出世。","q":"2019年开始，2021年结束，桃花类型，分手原因？","o":["小鲜肉，甜言蜜语。分手原因，对方花心被抓。","已婚男。分手原因，欺骗自己，没离婚。","与前夫旧情复燃，分手原因，个性不合，吵架多。","事业成功人士，分手原因，命主占有欲过强，对方提出分手。"],"a":"B","k":"婚姻"},{"i":"ftb_0111","y":2024,"n":111,"c":"case_23","g":"女命：1980年9月21日早上11：25午时，出生malaysia","q":"命主的学业状况如何？","o":["小学毕业","初中辍学","专科毕业","博士学位"],"a":"C","k":"学业"},{"i":"ftb_0112","y":2024,"n":112,"c":"case_23","g":"女命：1980年9月21日早上11：25午时，出生malaysia","q":"命主的婚姻狀況如何？","o":["未婚，育有二女","已婚，育有二子","离婚，育有一子一女","已婚，育有一子一女"],"a":"D","k":"婚姻"},{"i":"ftb_0113","y":2024,"n":113,"c":"case_23","g":"女命：1980年9月21日早上11：25午时，出生malaysia","q":"命主在2017年和2019年發生了什麼事？","o":["开刀生小孩","交通意外","考取文凭失利","流产"],"a":"D","k":"健康"},{"i":"ftb_0114","y":2024,"n":114,"c":"case_23","g":"女命：1980年9月21日早上11：25午时，出生malaysia","q":"命主的兩個孩子是哪一年出生的？","o":["2020年女孩，2021年男孩","2013年，2015年两个女孩","2017年，2019年两个男孩","2013年男孩，2015年女孩"],"a":"D","k":"子女"},{"i":"ftb_0115","y":2024,"n":115,"c":"case_23","g":"女命：1980年9月21日早上11：25午时，出生malaysia","q":"命主毕业后从事什么行业？","o":["中学教师","公司主管","房屋经纪","会计"],"a":"D","k":"事业"},{"i":"ftb_0116","y":2024,"n":116,"c":"case_24","g":"男命：2007年1月31日0900巳时，malaysia出生。","q":"请问命主在几前被诊断出哪一种疾病？","o":["弱视（斗鸡眼）","心脏有孔","肺炎","地中海贫血症"],"a":"B","k":"健康"},{"i":"ftb_0117","y":2024,"n":117,"c":"case_24","g":"男命：2007年1月31日0900巳时，malaysia出生。","q":"此命主的出身贫或富？","o":["贫穷家庭长大","小康之家出身","富贵家庭出身","虽有父母，童年却被养在孤儿院"],"a":"C","k":"家庭"},{"i":"ftb_0118","y":2024,"n":118,"c":"case_24","g":"男命：2007年1月31日0900巳时，malaysia出生。","q":"命主的身材外貌如何？","o":["身材高瘦皮肤白皙，细眼薄唇，秀气温文。","身材高大魁梧，浓眉大眼，外表威严。","身材矮瘦皮肤蜡黄，五官扁平，其貌不扬。","身材偏矮微胖，圆脸咪眼，外表和善。"],"a":"A","k":"外貌"},{"i":"ftb_0119","y":2024,"n":119,"c":"case_24","g":"男命：2007年1月31日0900巳时，malaysia出生。","q":"命主在2016年，家里发生了什么事？","o":["父亲破产，被判入穷籍","婆婆因急病去世","父亲严重车祸，休养在家，无法工作。","父母离异"],"a":"D","k":"家庭"},{"i":"ftb_0120","y":2024,"n":120,"c":"case_24","g":"男命：2007年1月31日0900巳时，malaysia出生。","q":"命主父亲现在的身家？","o":["失业在家，入不敷出。","小康家庭","千万身家（马币）","亿万身家（马币）"],"a":"C","k":"财运"},{"i":"ftb_0121","y":2025,"n":121,"c":"case_25","g":"坤造：广东出生 西历1951年11月14日巳时","q":"此命出生家境如何？","o":["富裕","贫穷","父从商母是村干部","父母当官"],"a":"B","k":"家庭"},{"i":"ftb_0122","y":2025,"n":122,"c":"case_25","g":"坤造：广东出生 西历1951年11月14日巳时","q":"婚姻如何？","o":["一婚","二婚","一生未嫁","夫早亡"],"a":"D","k":"婚姻"},{"i":"ftb_0123","y":2025,"n":123,"c":"case_25","g":"坤造：广东出生 西历1951年11月14日巳时","q":"此人年轻时何种工作？","o":["父母有钱，不用工作","家贫，十多岁卖艺为生","父母帮助，自己创业","生活困难做舞女"],"a":"B","k":"事业"},{"i":"ftb_0124","y":2025,"n":124,"c":"case_25","g":"坤造：广东出生 西历1951年11月14日巳时","q":"1980年发生何事？","o":["结婚","交通意外","被人打劫受伤","得到意外偏财"],"a":"A","k":"婚姻"},{"i":"ftb_0125","y":2025,"n":125,"c":"case_25","g":"坤造：广东出生 西历1951年11月14日巳时","q":"1993年发生何事？","o":["贵人相扶得财","丈夫病亡","交通意外入院手术","父亲病亡"],"a":"B","k":"婚姻"},{"i":"ftb_0126","y":2025,"n":126,"c":"case_26","g":"女命：西历1987年7月5日午时，香港出生","q":"2022年至今，命主的健康状况如何？","o":["健康少病痛，但有皮肤敏感问题，需要戒吃海鲜","这数年間做过大型手术，曾有生命危险","体弱多病，而且患有糖尿病，病情反复","身材变得肥胖，肝、肠胃问题，以及有脚患困扰"],"a":"D","k":"健康"},{"i":"ftb_0127","y":2025,"n":127,"c":"case_26","g":"女命：西历1987年7月5日午时，香港出生","q":"命主的性格特质、学历水平和现时职业情况如何？","o":["平庸懒惰，大学毕业，普通受薪阶层","聪敏不爱读书，中学毕业，兼职为主","不聪敏但勤奋，大学毕业，经营家族生意","聪敏能读书，硕士博士，企业的管理层"],"a":"B","k":"性格"},{"i":"ftb_0128","y":2025,"n":128,"c":"case_26","g":"女命：西历1987年7月5日午时，香港出生","q":"命主在2018年至今的财政和事业运势怎样？","o":["感情诈骗导致积蓄至无，幸有固定工作收入稳定","名成利就，工作顺利，个人能力得以发挥","自己当老板，生意额一般，艰辛经营","不停转工，财来财去，与家人同住，日常开支由伴侣负担"],"a":"D","k":"财运"},{"i":"ftb_0129","y":2025,"n":129,"c":"case_26","g":"女命：西历1987年7月5日午时，香港出生","q":"命主现时的婚姻状况如何？","o":["婚姻美满，夫妻二人相敬如宾","已婚，但常被配偶言语伤害、责备","离婚后再婚，现时感情稳定","同性恋者，得到伴侣爱护"],"a":"D","k":"婚姻"},{"i":"ftb_0130","y":2025,"n":130,"c":"case_26","g":"女命：西历1987年7月5日午时，香港出生","q":"现时命主与父母的关系及家庭背景如何？","o":["家境富有，不愁衣食，跟母亲感情好，相对父亲关系较疏离","家境曾经小康，父随后生意失败，父母与命主关系正常","从小贫穷，母亲去世，父亲养育命主，并与命主感情好","父母离婚，各自提供基本生活费，并由外婆照顾"],"a":"B","k":"家庭"},{"i":"ftb_0131","y":2025,"n":131,"c":"case_27","g":"男命：西历1983年4月21日上午6-7时，日本宫崎县出生","q":"命主出身及家庭情况如何？","o":["出生后次年母亲去世，父亲为小型企业主，再婚后又生一弟一妹","父亲为政府高级职员，2021年去世，命主有一兄一姐","母亲是家庭主妇，父亲为小型企业主，命主有一弟","1986年父亲去世，母亲继承产业守寡至今，命主有一姐一弟"],"a":"B","k":"家庭"},{"i":"ftb_0132","y":2025,"n":132,"c":"case_27","g":"男命：西历1983年4月21日上午6-7时，日本宫崎县出生","q":"命主的样貌、性情、爱好及职业为何？","o":["腿脚残疾脾气怪，喜好文艺爵士与古典音乐，现为萨克斯手兼乐团老板","身材高大魁梧，性情固执，喜好音乐，现为酒吧老板","中等身材，勤奋叛逆，喜好拳击、橄榄球等运动，现为餐厅老板","早产且身体不好，喜好园艺，现为小型地产经纪公司老板"],"a":"B","k":"性格"},{"i":"ftb_0133","y":2025,"n":133,"c":"case_27","g":"男命：西历1983年4月21日上午6-7时，日本宫崎县出生","q":"命主的学历和职业状况如何？","o":["重点大学医学类专业，毕业后转行，2013年从事现在工作","重点大学文科毕业，2011年进入现工作，2019年曾因事判监半年","高中毕业，边打工边学习，2014年得贵人提携进入现在工作","重点大学文科专业，中途退学，2021年进入现在工作"],"a":"D","k":"学业"},{"i":"ftb_0134","y":2025,"n":134,"c":"case_27","g":"男命：西历1983年4月21日上午6-7时，日本宫崎县出生","q":"命主的婚恋和子女情况如何？","o":["婚恋不顺，经人介绍，2011年结婚，2014年生育一女","2011年与中学同学奉子成婚，关系平淡，2012年生一子，2015年生次子","多次恋爱，至今未婚，无子女","2018年离婚后一直独身，无子女"],"a":"C","k":"婚姻"},{"i":"ftb_0135","y":2025,"n":135,"c":"case_27","g":"男命：西历1983年4月21日上午6-7时，日本宫崎县出生","q":"2022年命主发生了什么重要事件？","o":["母亲去世","外出旅行时遭遇车祸受伤","染患新冠并引发其他病症，住院治疗四个多月","事业受阻欠债，只能卖房填补漏洞"],"a":"A","k":"家庭"},{"i":"ftb_0136","y":2025,"n":136,"c":"case_28","g":"男命：西元1993年4月8日23:34子时，新加坡出生","q":"命主儿时家庭情况如何？","o":["父亲出轨，母亲照顾生活","父母外出工作，由外婆抚养","父亲工作聚少离多，母亲患病","父母离异，跟随母亲改嫁国外"],"a":"C","k":"家庭"},{"i":"ftb_0137","y":2025,"n":137,"c":"case_28","g":"男命：西元1993年4月8日23:34子时，新加坡出生","q":"命主在2001年发生了什么事？","o":["遇校园霸凌，申请休学","参与小语种演讲比赛获奖","受伤后发现遗传病，需要长期用药","交通意外，人平安"],"a":"D","k":"灾劫"},{"i":"ftb_0138","y":2025,"n":138,"c":"case_28","g":"男命：西元1993年4月8日23:34子时，新加坡出生","q":"命主2022年后的职业行业情况？","o":["牧师","入殓师","航运物流管理","传媒业网红"],"a":"B","k":"事业"},{"i":"ftb_0139","y":2025,"n":139,"c":"case_28","g":"男命：西元1993年4月8日23:34子时，新加坡出生","q":"命主感情状况为何？","o":["未婚，单身，恋情多短暂","未婚，有女友交往多年，脚踏两条船","已婚，感情稳定","已婚，矛盾不断，离婚手续中"],"a":"A","k":"婚姻"},{"i":"ftb_0140","y":2025,"n":140,"c":"case_28","g":"男命：西元1993年4月8日23:34子时，新加坡出生","q":"命主抑郁症状最严重的年份？","o":["2002","2016","2018","2024"],"a":"B","k":"健康"},{"i":"ftb_0141","y":2025,"n":141,"c":"case_29","g":"乾造：西历1988年1月10日早上8时12分，马来西亚出生","q":"命主目前的工作和生活情况如何？","o":["在私人企业上班，超过十万存款，生活稳定","自我经营做老板，有负债","在普通公司里打工，月光族","在私人企业做高管，收入稳定，自己也有开店经营买卖"],"a":"D","k":"事业"},{"i":"ftb_0142","y":2025,"n":142,"c":"case_29","g":"乾造：西历1988年1月10日早上8时12分，马来西亚出生","q":"命主在2004年发生了什么事？","o":["读书时期，被人举报与女生有亲密行为，被赶出学校","上学时发生车祸，伤了手脚","参加制服团体举办的行走比赛，队伍拿到第一名","离校去摩托车店做学徒"],"a":"A","k":"学业"},{"i":"ftb_0143","y":2025,"n":143,"c":"case_29","g":"乾造：西历1988年1月10日早上8时12分，马来西亚出生","q":"命主在哪一年结婚？","o":["2021","2017","2022","2016"],"a":"D","k":"婚姻"},{"i":"ftb_0144","y":2025,"n":144,"c":"case_29","g":"乾造：西历1988年1月10日早上8时12分，马来西亚出生","q":"命主现在的婚姻与子女状况如何？","o":["已婚，育有3个孩子，流产2个","离婚，育有2个孩子，流产1个","二婚，育有1个孩子","已婚，没有子嗣"],"a":"A","k":"家庭"},{"i":"ftb_0145","y":2025,"n":145,"c":"case_29","g":"乾造：西历1988年1月10日早上8时12分，马来西亚出生","q":"命主个性及特色如何？","o":["自私、贪心、好色","可靠、慷慨、不怕事，风流，女人缘好","内向，沉默寡言，情绪化","外向胆大好出风头，急性子"],"a":"B","k":"性格"},{"i":"ftb_0146","y":2025,"n":146,"c":"case_30","g":"男命：西历1973年8月24日00:35子时，马来西亚出生","q":"命主的性格和出生背景如何？","o":["足智多谋，为人仗义但固执，出生在有钱家庭","脾气暴躁冲动，容易得罪人，出生在贫穷家庭","外表温柔文质彬彬，容易让人误会娘娘腔，出生在中等家庭","为人懒惰不思进取，只顾享乐，出生在富有家庭"],"a":"A","k":"性格"},{"i":"ftb_0147","y":2025,"n":147,"c":"case_30","g":"男命：西历1973年8月24日00:35子时，马来西亚出生","q":"命主喜欢的居家装修风格是？","o":["炫酷风格，充满高科技设备","欧式风格，高贵典雅，喜欢收藏古灵精怪摆设","中式风格，复古，喜欢古董和摆设风水物品","环保极简风格，不喜太多摆设"],"a":"B","k":"性格"},{"i":"ftb_0148","y":2025,"n":148,"c":"case_30","g":"男命：西历1973年8月24日00:35子时，马来西亚出生","q":"在丙辰大限（43-52岁），命主在哪一年出国创业，领域为何？","o":["2015年，饮食领域","2017年，儿童培训领域","2018年，房地产领域","2019年，酒店住宿领域"],"a":"B","k":"事业"},{"i":"ftb_0149","y":2025,"n":149,"c":"case_30","g":"男命：西历1973年8月24日00:35子时，马来西亚出生","q":"命主在2021年发生何事？","o":["疫情过后生意不佳，资金周转困难导致倒闭","回家途中遇到歹徒，被刺伤","母亲染病去世","疫情过后生意峰回路转，蒸蒸日上"],"a":"D","k":"事业"},{"i":"ftb_0150","y":2025,"n":150,"c":"case_30","g":"男命：西历1973年8月24日00:35子时，马来西亚出生","q":"命主在2024年的健康状况如何？","o":["健康无碍，只是饮食失调导致肥胖","长期久坐导致脊椎侧弯","经常无节制吸烟，引发鼻癌","被车撞倒，左脚骨折"],"a":"C","k":"健康"},{"i":"ftb_0151","y":2025,"n":151,"c":"case_31","g":"女命：西历1988年2月15日16:50申时，台湾出生","q":"命主原生家庭父母亲状况如何？","o":["婚姻美满、家庭和谐","婚姻健在但吵闹不休","离异，跟随父亲","离异，跟随母亲"],"a":"A","k":"家庭"},{"i":"ftb_0152","y":2025,"n":152,"c":"case_31","g":"女命：西历1988年2月15日16:50申时，台湾出生","q":"命主大学时期读什么科系？","o":["音乐","金融","美术","理工"],"a":"C","k":"学业"},{"i":"ftb_0153","y":2025,"n":153,"c":"case_31","g":"女命：西历1988年2月15日16:50申时，台湾出生","q":"命主目前的婚姻状况为何？","o":["未婚单身","已婚育有子女","已婚未育","离婚育有子女"],"a":"B","k":"婚姻"},{"i":"ftb_0154","y":2025,"n":154,"c":"case_31","g":"女命：西历1988年2月15日16:50申时，台湾出生","q":"命主现职行业为何？","o":["身心灵导师","行政会计","美术设计","健身教练"],"a":"D","k":"事业"},{"i":"ftb_0155","y":2025,"n":155,"c":"case_31","g":"女命：西历1988年2月15日16:50申时，台湾出生","q":"对命主的身材描述为何？","o":["身材娇小","身材健壮","身材矮胖","身材瘦长"],"a":"B","k":"外貌"},{"i":"ftb_0156","y":2025,"n":156,"c":"case_32","g":"男命：西元1970年7月22日申时，北京出生","q":"命主学历状况为何？","o":["文盲","小学毕业","高中或专科毕业","博士"],"a":"C","k":"学业"},{"i":"ftb_0157","y":2025,"n":157,"c":"case_32","g":"男命：西元1970年7月22日申时，北京出生","q":"命主出社会后的工作是什么？","o":["进入工厂，随后进入国企","进入学校担任老师","进入企业担任大企业高管","做小生意，成为企业家"],"a":"A","k":"事业"},{"i":"ftb_0158","y":2025,"n":158,"c":"case_32","g":"男命：西元1970年7月22日申时，北京出生","q":"命主早年一直在北京生活，在哪个岁运搬迁到厦门工作？","o":["27-31岁","32-36岁","37-41岁","42-46岁"],"a":"D","k":"运势"},{"i":"ftb_0159","y":2025,"n":159,"c":"case_32","g":"男命：西元1970年7月22日申时，北京出生","q":"命主身体状况为何？","o":["从小患有暗疾，影响终身","长期失眠，精神不济","长年运动，身体素质好","身体素质好，但遭遇重大意外导致残缺"],"a":"C","k":"健康"},{"i":"ftb_0160","y":2025,"n":160,"c":"case_32","g":"男命：西元1970年7月22日申时，北京出生","q":"命主一生整体外界对其性格的评价如何？","o":["重义气有原则，对外应对得体，深受朋友与长官尊敬","喜欢独处少交际，重视家庭和金钱，家庭稳定","放荡不羁朋友和桃花多，喜高谈阔论，评价褒贬不一","脾气暴躁情绪不稳，家人朋友无法沟通"],"a":"A","k":"性格"}],"cases":{"case_1":{"bazi":"甲寅 戊辰 己亥 壬申","time":"申时","ju":"金四局","zodiac":"虎","solar":"1974-04-28","lunar":"一九七四年四月初七","pal":[["命宫","天同 火星"],["兄弟","七杀 天马"],["夫妻","天梁 左辅 右弼 天钺 地劫"],["子女","廉贞 天相"],["财帛","巨门"],["疾厄","贪狼"],["迁移","太阴 地空 擎羊"],["仆役","紫微 天府 文昌 禄存"],["官禄","天机 天魁 陀罗"],["田宅","破军 文曲"],["福德","太阳 铃星"],["父母","武曲"]]},"case_2":{"bazi":"辛酉 癸巳 甲辰 乙丑","time":"丑时","ju":"水二局","zodiac":"鸡","solar":"1981-05-26","lunar":"一九八一年四月廿三","pal":[["命宫","廉贞 天府 火星"],["夫妻","破军 天钺"],["财帛","紫微 地劫"],["疾厄","天机 天马 铃星"],["迁移","七杀 地空 擎羊"],["仆役","太阳 天梁 文昌 禄存"],["官禄","武曲 天相 陀罗"],["田宅","天同 巨门 左辅 右弼"],["福德","贪狼 天魁"],["父母","太阴 文曲"]]},"case_3":{"bazi":"庚午 辛巳 戊子 辛酉","time":"酉时","ju":"水二局","zodiac":"马","solar":"1990-05-23","lunar":"一九九〇年四月廿九","pal":[["命宫","禄存 天马 地劫"],["兄弟","廉贞 七杀 左辅 右弼 天钺 陀罗"],["夫妻","天梁"],["子女","天相"],["财帛","巨门"],["疾厄","紫微 贪狼"],["迁移","天机 太阴 地空"],["仆役","天府 文昌 文曲 天魁"],["官禄","太阳 铃星"],["田宅","武曲 破军"],["福德","天同 火星"],["父母","擎羊"]]},"case_4":{"bazi":"丁巳 庚戌 丙辰 甲午","time":"午时","ju":"火六局","zodiac":"蛇","solar":"1977-10-26","lunar":"一九七七年九月十四","pal":[["命宫","武曲 文昌 铃星"],["兄弟","天同"],["夫妻","七杀 右弼"],["子女","天梁"],["财帛","廉贞 天相 左辅"],["疾厄","巨门 天魁 天马"],["迁移","贪狼 文曲"],["仆役","太阴 天钺 火星"],["官禄","紫微 天府"],["田宅","天机 擎羊"],["福德","破军 禄存"],["父母","太阳 地空 地劫 陀罗"]]},"case_5":{"bazi":"乙丑 壬午 己亥 癸酉","time":"酉时","ju":"水二局","zodiac":"牛","solar":"1985-06-29","lunar":"一九八五年五月十二","pal":[["命宫","天府"],["兄弟","左辅 天钺 地劫"],["夫妻","紫微 破军 铃星"],["子女","天机 右弼"],["疾厄","太阳 擎羊"],["迁移","武曲 七杀 禄存"],["仆役","天同 天梁 地空 陀罗"],["官禄","天相 文昌 文曲"],["田宅","巨门 天魁 火星"],["福德","廉贞 贪狼 天马"],["父母","太阴"]]},"case_6":{"bazi":"癸亥 壬戌 癸巳 癸亥","time":"亥时","ju":"水二局","zodiac":"猪","solar":"1983-11-01","lunar":"一九八三年九月廿七","pal":[["命宫","太阳 文昌 陀罗"],["兄弟","武曲 地劫"],["夫妻","天同 铃星"],["子女","七杀 火星"],["财帛","天梁"],["疾厄","廉贞 天相"],["迁移","巨门 天钺 天马"],["仆役","贪狼"],["官禄","太阴 文曲 天魁"],["田宅","紫微 天府 右弼"],["福德","天机 擎羊"],["父母","破军 左辅 禄存 地空"]]},"case_7":{"bazi":"甲子 丙子 丁丑 己酉","time":"酉时","ju":"火六局","zodiac":"鼠","solar":"1984-12-09","lunar":"一九八四年闰十月十七","pal":[["命宫","紫微 贪狼 擎羊"],["兄弟","天机 太阴 左辅 禄存 天马 地空"],["夫妻","天府 文昌 文曲 天魁 陀罗"],["子女","太阳 右弼"],["财帛","武曲 破军 火星"],["疾厄","天同"],["仆役","地劫"],["官禄","廉贞 七杀 天钺 铃星"],["田宅","天梁"],["福德","天相"],["父母","巨门"]]},"case_8":{"bazi":"辛酉 甲午 丙寅 戊戌","time":"戌时","ju":"火六局","zodiac":"鸡","solar":"1981-06-17","lunar":"一九八一年五月十六","pal":[["命宫","破军 左辅 铃星 陀罗"],["夫妻","紫微 右弼 天魁"],["子女","天机"],["财帛","七杀"],["疾厄","太阳 天梁"],["迁移","武曲 天相 文曲 天钺"],["仆役","天同 巨门 地空 火星"],["官禄","贪狼 文昌"],["田宅","太阴 天马"],["福德","廉贞 天府 擎羊"],["父母","禄存 地劫"]]},"case_9":{"bazi":"丙午 戊戌 辛亥 戊子","time":"晚子时","ju":"木三局","zodiac":"马","solar":"1966-10-18","lunar":"一九六六年九月初五","pal":[["命宫","天同 文昌"],["兄弟","天钺"],["夫妻","天马"],["子女","廉贞 七杀"],["财帛","天梁 擎羊"],["疾厄","天相 禄存"],["迁移","巨门 文曲 陀罗"],["仆役","紫微 贪狼 铃星"],["官禄","天机 太阴 右弼"],["田宅","天府 火星"],["福德","太阳 左辅"],["父母","武曲 破军 天魁 地空 地劫"]]},"case_10":{"bazi":"壬寅 丁未 丙子 癸巳","time":"巳时","ju":"金四局","zodiac":"虎","solar":"1962-08-06","lunar":"一九六二年七月初七","pal":[["命宫","太阴 天魁"],["兄弟","紫微 天府"],["夫妻","天机"],["子女","破军 擎羊"],["财帛","太阳 禄存"],["疾厄","武曲 左辅 陀罗"],["迁移","天同 文曲"],["仆役","七杀 天马 铃星"],["官禄","天梁"],["田宅","廉贞 天相 地空 火星"],["福德","巨门 文昌 天钺"],["父母","贪狼 右弼 地劫"]]},"case_11":{"bazi":"丙寅 壬辰 戊戌 癸亥","time":"亥时","ju":"水二局","zodiac":"虎","solar":"1986-04-24","lunar":"一九八六年三月十六","pal":[["命宫","武曲 破军 禄存"],["兄弟","天同 陀罗"],["夫妻","文曲"],["子女","铃星"],["财帛","廉贞 七杀"],["疾厄","天梁 地空 火星"],["迁移","天相 文昌 天魁"],["仆役","巨门 地劫"],["官禄","紫微 贪狼 天钺"],["田宅","天机 太阴 右弼 天马"],["福德","天府"],["父母","太阳 左辅 擎羊"]]},"case_12":{"bazi":"丙申 辛卯 丁丑 乙巳","time":"巳时","ju":"火六局","zodiac":"猴","solar":"1956-03-11","lunar":"一九五六年正月廿九","pal":[["命宫","廉贞 破军 文曲 天钺"],["夫妻","火星"],["子女","地空 擎羊"],["财帛","紫微 七杀 文昌 禄存"],["疾厄","天机 天梁 左辅 地劫 陀罗"],["迁移","天相 铃星"],["仆役","太阳 巨门 天马"],["官禄","武曲 贪狼"],["田宅","天同 太阴"],["福德","天府 天魁"],["父母","右弼"]]},"case_13":{"bazi":"戊午 丙辰 丁酉 己酉","time":"酉时","ju":"火六局","zodiac":"马","solar":"1978-04-05","lunar":"一九七八年二月廿八","pal":[["命宫","破军 擎羊"],["兄弟","太阳 左辅 禄存"],["夫妻","武曲 陀罗"],["子女","天同"],["财帛","七杀 地空"],["疾厄","天梁 文昌 文曲 天魁"],["迁移","廉贞 天相 铃星"],["仆役","巨门"],["官禄","贪狼 火星"],["田宅","太阴 右弼"],["福德","紫微 天府 天马 地劫"],["父母","天机 天钺"]]},"case_14":{"bazi":"戊戌 壬戌 丁丑 甲辰","time":"辰时","ju":"火六局","zodiac":"狗","solar":"1958-10-27","lunar":"一九五八年九月十五","pal":[["命宫","巨门 文昌 擎羊"],["兄弟","廉贞 贪狼 禄存 火星"],["夫妻","太阴 陀罗"],["子女","天府 地劫"],["财帛","右弼"],["疾厄","紫微 破军 天魁"],["迁移","天机 左辅"],["官禄","太阳"],["田宅","武曲 七杀"],["福德","天同 天梁 文曲 天马"],["父母","天相 天钺 地空 铃星"]]},"case_15":{"bazi":"壬午 乙巳 庚子 庚辰","time":"辰时","ju":"木三局","zodiac":"马","solar":"2002-06-01","lunar":"二〇〇二年四月廿一","pal":[["命宫","天梁"],["兄弟","廉贞 天相 擎羊"],["夫妻","巨门 禄存"],["子女","贪狼 陀罗"],["财帛","太阴"],["疾厄","紫微 天府 文曲 天马"],["迁移","天机 左辅 右弼 地空 铃星"],["仆役","破军 文昌"],["官禄","太阳 天钺 火星"],["田宅","武曲"],["福德","天同 天魁 地劫"],["父母","七杀"]]},"case_16":{"bazi":"庚申 癸未 乙酉 辛巳","time":"巳时","ju":"火六局","zodiac":"猴","solar":"1980-07-11","lunar":"一九八〇年五月廿九","pal":[["命宫","武曲 贪狼 天魁"],["兄弟","天同 太阴"],["夫妻","天府"],["财帛","廉贞 破军 文曲 擎羊"],["疾厄","左辅 禄存"],["迁移","天钺 火星 陀罗"],["仆役","右弼 地空"],["官禄","紫微 七杀 文昌"],["田宅","天机 天梁 地劫"],["福德","天相 铃星"],["父母","太阳 巨门 天马"]]},"case_17":{"bazi":"庚申 甲申 己巳 壬申","time":"申时","ju":"火六局","zodiac":"猴","solar":"1980-08-24","lunar":"一九八〇年七月十四","pal":[["命宫","廉贞 天相 文曲"],["兄弟","巨门"],["夫妻","贪狼 左辅 火星"],["子女","太阴 擎羊"],["财帛","紫微 天府 禄存"],["疾厄","天机 天钺 地劫 陀罗"],["迁移","破军 铃星"],["仆役","太阳"],["官禄","武曲 右弼"],["田宅","天同 地空"],["福德","七杀 文昌 天马"],["父母","天梁 天魁"]]},"case_18":{"bazi":"辛亥 辛丑 戊戌 戊午","time":"午时","ju":"金四局","zodiac":"猪","solar":"1972-01-08","lunar":"一九七一年冬月廿二","pal":[["命宫","太阳 天魁"],["兄弟","武曲 破军 天马 地空 地劫"],["夫妻","天同 文昌 铃星"],["子女","火星"],["财帛","左辅 天钺"],["疾厄","廉贞 七杀"],["迁移","天梁 右弼"],["仆役","天相"],["官禄","巨门 文曲 擎羊"],["田宅","紫微 贪狼 禄存"],["福德","天机 太阴 陀罗"],["父母","天府"]]},"case_19":{"bazi":"辛丑 庚子 丁酉 辛丑","time":"丑时","ju":"木三局","zodiac":"牛","solar":"1961-12-30","lunar":"一九六一年冬月廿三","pal":[["命宫","巨门 天马 铃星"],["兄弟","贪狼 地空 擎羊"],["夫妻","太阴 文昌 禄存"],["子女","紫微 天府 陀罗"],["财帛","天机"],["疾厄","破军 天魁"],["迁移","太阳 文曲"],["仆役","武曲 火星"],["官禄","天同"],["田宅","七杀 左辅 天钺"],["福德","天梁"],["父母","廉贞 天相 右弼 地劫"]]},"case_20":{"bazi":"癸亥 壬戌 己丑 乙丑","time":"丑时","ju":"木三局","zodiac":"猪","solar":"1983-10-28","lunar":"一九八三年九月廿三","pal":[["命宫","太阴 文昌"],["兄弟","紫微 天府"],["夫妻","天机"],["子女","破军"],["财帛","太阳 文曲 天钺 天马"],["疾厄","武曲"],["迁移","天同 天魁"],["仆役","七杀 右弼"],["官禄","天梁 擎羊"],["田宅","廉贞 天相 左辅 禄存 地劫"],["福德","巨门 铃星 陀罗"],["父母","贪狼 地空 火星"]]},"case_21":{"bazi":"辛亥 壬辰 丁卯 戊申","time":"申时","ju":"火六局","zodiac":"猪","solar":"1971-04-12","lunar":"一九七一年三月十七","pal":[["命宫","右弼 陀罗"],["兄弟","廉贞 七杀 地劫"],["夫妻","天梁 左辅 天魁 铃星"],["子女","天相 天马 火星"],["财帛","巨门"],["疾厄","紫微 贪狼 地空"],["迁移","天机 太阴 文昌 天钺"],["仆役","天府"],["官禄","太阳 文曲"],["田宅","武曲 破军"],["福德","天同 擎羊"],["父母","禄存"]]},"case_22":{"bazi":"癸亥 乙卯 癸丑 己未","time":"未时","ju":"木三局","zodiac":"猪","solar":"1983-03-26","lunar":"一九八三年二月十二","pal":[["夫妻","地劫"],["子女","紫微 七杀 左辅 天钺 天马 铃星"],["财帛","天机 天梁 地空 火星"],["疾厄","天相 文昌 天魁"],["迁移","太阳 巨门"],["仆役","武曲 贪狼 擎羊"],["官禄","天同 太阴 禄存"],["田宅","天府 文曲 陀罗"],["父母","廉贞 破军 右弼"]]},"case_23":{"bazi":"庚申 乙酉 丁酉 丙午","time":"午时","ju":"土五局","zodiac":"猴","solar":"1980-09-21","lunar":"一九八〇年八月十三","pal":[["命宫","太阳 天梁 右弼"],["兄弟","武曲 天相 天马"],["夫妻","天同 巨门 天魁"],["子女","贪狼"],["财帛","太阴 左辅"],["疾厄","廉贞 天府 文曲"],["迁移","擎羊"],["仆役","破军 禄存 火星"],["官禄","天钺 陀罗"],["田宅","紫微"],["福德","天机 地空 地劫"],["父母","七杀 文昌 铃星"]]},"case_24":{"bazi":"丙戌 辛丑 乙丑 辛巳","time":"巳时","ju":"火六局","zodiac":"狗","solar":"2007-01-31","lunar":"二〇〇六年腊月十三","pal":[["命宫","太阳 巨门 天马 铃星"],["兄弟","武曲 贪狼"],["夫妻","天同 太阴 地空 火星 擎羊"],["子女","天府 文昌 禄存"],["财帛","地劫 陀罗"],["疾厄","廉贞 破军 左辅"],["田宅","紫微 七杀 右弼 天魁"],["福德","天机 天梁"],["父母","天相 文曲 天钺"]]},"case_25":{"bazi":"辛卯 己亥 戊午 丁巳","time":"巳时","ju":"金四局","zodiac":"兔","solar":"1951-11-14","lunar":"一九五一年十月十六","pal":[["命宫","天魁 地空"],["兄弟","紫微 七杀 文昌 天马"],["夫妻","天机 天梁 地劫"],["子女","天相 铃星"],["财帛","太阳 巨门 天钺 火星"],["疾厄","武曲 贪狼 左辅 右弼"],["迁移","天同 太阴"],["仆役","天府"],["官禄","擎羊"],["田宅","廉贞 破军 文曲 禄存"],["福德","陀罗"]]},"case_26":{"bazi":"丁卯 丙午 乙卯 壬午","time":"午时","ju":"木三局","zodiac":"兔","solar":"1987-07-05","lunar":"一九八七年六月初十","pal":[["命宫","天相"],["兄弟","巨门"],["夫妻","廉贞 贪狼 天魁"],["子女","太阴 文曲"],["财帛","天府 左辅 天钺"],["迁移","紫微 破军 擎羊"],["仆役","天机 禄存"],["官禄","右弼 天马 地空 地劫 陀罗"],["田宅","太阳 文昌 铃星"],["福德","武曲 七杀 火星"],["父母","天同 天梁"]]},"case_27":{"bazi":"癸亥 丙辰 己卯 丁卯","time":"卯时","ju":"金四局","zodiac":"猪","solar":"1983-04-21","lunar":"一九八三年三月初九","pal":[["命宫","紫微 破军 铃星 擎羊"],["兄弟","天机 禄存 火星"],["夫妻","陀罗"],["子女","太阳"],["财帛","武曲 七杀"],["疾厄","天同 天梁 右弼 地空"],["迁移","天相 文昌 文曲"],["仆役","巨门 左辅"],["官禄","廉贞 贪狼 天钺 天马"],["田宅","太阴"],["福德","天府 天魁"],["父母","地劫"]]},"case_28":{"bazi":"癸酉 丙辰 庚申 丙子","time":"晚子时","ju":"土五局","zodiac":"鸡","solar":"1993-04-08","lunar":"一九九三年三月十七","pal":[["命宫","太阳 文曲"],["兄弟","武曲 七杀 天魁 火星"],["夫妻","天同 天梁"],["子女","天相 擎羊"],["财帛","巨门 禄存"],["疾厄","廉贞 贪狼 天马 地空 地劫 陀罗"],["迁移","太阴 文昌 铃星"],["仆役","天府"],["官禄","右弼"],["田宅","紫微 破军"],["福德","天机 左辅"],["父母","天钺"]]},"case_29":{"bazi":"丁卯 癸丑 甲子 戊辰","time":"辰时","ju":"土五局","zodiac":"兔","solar":"1988-01-10","lunar":"一九八七年冬月廿一","pal":[["命宫","贪狼 文曲"],["兄弟","太阳 太阴 地空 擎羊"],["夫妻","武曲 天府 文昌 禄存"],["子女","天同 天马 陀罗"],["财帛","破军"],["疾厄","地劫"],["迁移","廉贞 左辅 铃星"],["仆役","火星"],["官禄","七杀 右弼"],["田宅","天梁 天魁"],["福德","紫微 天相"],["父母","天机 巨门 天钺"]]},"case_30":{"bazi":"癸丑 庚申 壬辰 庚子","time":"早子时","ju":"木三局","zodiac":"牛","solar":"1973-08-24","lunar":"一九七三年七月廿六","pal":[["命宫","天机 太阴"],["兄弟","天府"],["夫妻","太阳"],["子女","武曲 破军 天钺"],["财帛","天同 右弼 文曲"],["疾厄","天魁 火星"],["仆役","廉贞 七杀 擎羊"],["官禄","天梁 禄存"],["田宅","天相 天马 地空 地劫 陀罗"],["福德","巨门 左辅 文昌 铃星"],["父母","紫微 贪狼"]]},"case_31":{"bazi":"丁卯 甲寅 庚子 甲申","time":"申时","ju":"火六局","zodiac":"兔","solar":"1988-02-15","lunar":"一九八七年腊月廿八","pal":[["命宫","太阳 天马 火星 陀罗"],["兄弟","武曲"],["夫妻","天同 左辅 地空"],["子女","七杀 文昌"],["财帛","天梁"],["疾厄","廉贞 天相 文曲"],["迁移","巨门 右弼 天魁"],["仆役","贪狼"],["官禄","太阴 天钺"],["田宅","紫微 天府"],["福德","天机 地劫 擎羊"],["父母","破军 禄存 铃星"]]},"case_32":{"bazi":"庚戌 癸未 癸卯 庚申","time":"申时","ju":"土五局","zodiac":"狗","solar":"1970-07-22","lunar":"一九七〇年六月二十","pal":[["命宫","天府 铃星"],["夫妻","廉贞 破军 左辅 火星 擎羊"],["子女","禄存 天马"],["财帛","天钺 地劫 陀罗"],["迁移","紫微 七杀 右弼"],["仆役","天机 天梁"],["官禄","天相 地空"],["田宅","太阳 巨门 文昌"],["福德","武曲 贪狼 天魁"],["父母","天同 太阴 文曲"]]}}};
+
+/* ---------------- 状态 ---------------- */
+const state = { year:'all', size:10, queue:[], idx:0, answers:[], answered:false, chartOpen:false };
+const $ = s => document.querySelector(s);
+const el = (tag, cls, html) => { const n=document.createElement(tag); if(cls) n.className=cls; if(html!=null) n.innerHTML=html; return n; };
+const LETTERS = ['A','B','C','D'];
+const fmt = n => String(n).padStart(2,'0');
+const yearOf = q => q.y;
+
+/* ---------------- 首页 ---------------- */
+function poolOf(year){
+  return DATA.items.filter(q => year==='all' || String(q.y)===String(year));
+}
+function setPressed(group, value, attr){
+  group.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset[attr]===String(value))));
+}
+$('#yearChips').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if(!b) return;
+  state.year = b.dataset.year;
+  setPressed($('#yearChips'), state.year, 'year');
+  updatePoolLabel();
+});
+$('#sizeChips').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if(!b) return;
+  state.size = b.dataset.size;
+  setPressed($('#sizeChips'), state.size, 'size');
+  updatePoolLabel();
+});
+function updatePoolLabel(){
+  const n = poolOf(state.year).length;
+  $('#poolCount').textContent = `共 ${n} 题`;
+  const real = state.size==='all' ? n : Math.min(+state.size, n);
+  const mins = Math.max(2, Math.round(real * 0.55));
+  $('#sizeHint').textContent = state.size==='all'
+    ? `本局 ${real} 题，约 ${mins} 分钟。全做一遍基本等于打完整场选拔。`
+    : `本局 ${real} 题，约 ${mins} 分钟。想认真推演可以选少一点，每题多花点时间。`;
+}
+updatePoolLabel();
+
+/* ---------------- 开局 ---------------- */
+const shuffle = arr => { const a=arr.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; };
+
+$('#startBtn').addEventListener('click', () => {
+  const pool = shuffle(poolOf(state.year));
+  const n = state.size==='all' ? pool.length : Math.min(+state.size, pool.length);
+  state.queue = pool.slice(0,n);
+  state.idx = 0; state.answers = new Array(n).fill(null); state.answered = false;
+  $('#setup').classList.add('hidden');
+  $('#result').classList.add('hidden');
+  $('#quiz').classList.remove('hidden');
+  renderQuestion();
+  window.scrollTo({top:0,behavior:'instant'});
+});
+
+/* ---------------- 渲染题目 ---------------- */
+function renderQuestion(){
+  const q = state.queue[state.idx];
+  const total = state.queue.length;
+  state.answered = state.answers[state.idx] !== null;
+
+  $('#counter').textContent = `${state.idx+1} / ${total}`;
+  $('#progressBar').style.width = `${(state.idx)/total*100}%`;
+
+  const meta = $('#qMeta'); meta.innerHTML='';
+  meta.append(el('span','tag year', `${q.y} 年`));
+  meta.append(el('span','tag cat', q.k));
+  meta.append(el('span','tag', `第 ${q.n} 题`));
+
+  const gm = q.g.match(/^\s*(男命|女命|乾造|坤造|坤命|男性|女性)\s*[：:，,、]?\s*/);
+  if(gm){
+    meta.append(el('span','tag', gm[1].replace('男性','男命').replace('女性','女命')));
+    $('#birthText').textContent = q.g.slice(gm[0].length);
+  } else {
+    $('#birthText').textContent = q.g;
+  }
+
+  // 命盘
+  const c = DATA.cases[q.c];
+  const box = $('#chartBox'), body = $('#chartBody');
+  if(c){
+    const gz = c.bazi.split(' ');
+    const labels = ['年柱','月柱','日柱','时柱'];
+    let html = '<div class="bazi">' + gz.map((g,i)=>`<div class="pillar"><div class="gz">${g}</div><div class="lb">${labels[i]||''}</div></div>`).join('') + '</div>';
+    html += `<div class="chart-meta">${c.solar} · 农历${c.lunar} · ${c.time} · ${c.ju} · 属${c.zodiac}</div>`;
+    html += '<div class="palaces">' + c.pal.map(p=>`<div class="pal"><b>${p[0]}</b><span>${p[1]}</span></div>`).join('') + '</div>';
+    body.innerHTML = html;
+    box.classList.toggle('hidden', false);
+    box.open = false;
+    $('#chartToggle').textContent = '展开';
+  } else {
+    box.classList.add('hidden');
+  }
+
+  $('#stem').textContent = q.q;
+
+  const opts = $('#options'); opts.innerHTML='';
+  q.o.forEach((text,i)=>{
+    const b = el('button','opt');
+    b.dataset.k = LETTERS[i];
+    b.innerHTML = `<span class="k">${LETTERS[i]}</span><span class="t">${text}</span><span class="mk"></span>`;
+    b.addEventListener('click', ()=>choose(i));
+    opts.append(b);
+  });
+
+  const v = $('#verdict'); v.className='verdict'; v.textContent='';
+  $('#nextBtn').disabled = true;
+  $('#nextBtn').textContent = state.idx === total-1 ? '查看结果' : '下一题';
+
+  if(state.answered) paintAnswer(state.answers[state.idx]);
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+function choose(i){
+  if(state.answered) return;
+  const q = state.queue[state.idx];
+  state.answers[state.idx] = i;
+  state.answered = true;
+  paintAnswer(i);
+  $('#nextBtn').disabled = false;
+}
+
+function paintAnswer(picked){
+  const q = state.queue[state.idx];
+  const right = LETTERS.indexOf(q.a);
+  const buttons = [...document.querySelectorAll('#options .opt')];
+  buttons.forEach((b,i)=>{
+    b.classList.add('locked','dim');
+    const mk = b.querySelector('.mk');
+    if(i===right){ b.classList.remove('dim'); b.classList.add('correct'); mk.textContent='✓ 正确'; }
+    if(i===picked && picked!==right){ b.classList.remove('dim'); b.classList.add('wrong'); mk.textContent='✕ 你的选择'; }
+    else if(i===picked && picked===right){ mk.textContent='✓ 你的选择'; }
+  });
+  const ok = picked===right;
+  const v = $('#verdict');
+  v.className = 'verdict show ' + (ok?'ok':'no');
+  v.innerHTML = ok
+    ? `<b>答对了。</b>标准答案 ${q.a}。`
+    : `<b>答错了。</b>你选了 ${LETTERS[picked]}，标准答案是 <b>${q.a}</b>。`;
+  $('#progressBar').style.width = `${(state.idx+1)/state.queue.length*100}%`;
+  $('#nextBtn').disabled = false;
+  const nb = $('#nextBtn').getBoundingClientRect();
+  if(nb.bottom > (window.innerHeight || 800) - 8) $('#nextBtn').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+$('#nextBtn').addEventListener('click', ()=>{
+  if(state.idx >= state.queue.length-1){ showResult(); return; }
+  state.idx++; renderQuestion();
+});
+
+/* ---------------- 提前结束 ---------------- */
+$('#quitBtn').addEventListener('click', ()=>{
+  const done = state.answers.filter(a=>a!==null).length;
+  if(done===0){ goHome(); return; }
+  if(confirm(`已作答 ${done} 题，现在结束会直接看这批题的结果。`)) showResult(true);
+});
+
+function goHome(){
+  $('#quiz').classList.add('hidden');
+  $('#result').classList.add('hidden');
+  $('#setup').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+/* ---------------- 结果 ---------------- */
+function showResult(partial=false){
+  const pairs = state.queue.map((q,i)=>({q, picked: state.answers[i]})).filter(x=>x.picked!==null);
+  const total = pairs.length;
+  const right = pairs.filter(x=>LETTERS[x.picked]===x.q.a).length;
+  const pct = total ? Math.round(right/total*100) : 0;
+
+  $('#quiz').classList.add('hidden');
+  $('#result').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'instant'});
+
+  $('#scorePct').textContent = pct + '%';
+  $('#statRight').textContent = right;
+  $('#statWrong').textContent = total - right;
+  const arc = $('#ringArc');
+  arc.setAttribute('stroke', pct>=50?'#2F6B57':(pct>=30?'#B08A3E':'#A6402C'));
+  const target = String(402.1 * (1 - pct/100));
+  arc.style.transition = 'none';
+  arc.style.strokeDashoffset = '402.1';
+  void arc.getBoundingClientRect();
+  arc.style.transition = 'stroke-dashoffset 1s ease';
+  arc.style.strokeDashoffset = target;
+  setTimeout(()=>{ arc.style.strokeDashoffset = target; }, 120);
+
+  // 评语
+  let line, sub;
+  if(pct>=70){ line='这一局，稳。'; sub='明显高过随机基线，也高过公开榜单里的通用大模型成绩。'; }
+  else if(pct>=50){ line='在水准线之上。'; sub='四选一猜中率 25%，这个分数说明命盘信息确实被你用上了。'; }
+  else if(pct>=30){ line='接近随机，但不算白答。'; sub='命理题的选项往往都在「像」的范围内，能稳定超过 25% 已经需要一些章法。'; }
+  else if(pct>=15){ line='这一局偏难。'; sub='低于随机基线也常见——四个选项都在同一个命例上成立，靠常识反而容易被带偏。'; }
+  else { line='先别急着怀疑自己。'; sub='题量小的时候，单局波动极大，换一局换个年份再来一次更说明问题。'; }
+  if(partial) sub = `本局提前结束，只统计了已作答的 ${total} 题。` + sub;
+  $('#verdictLine').textContent = line;
+  $('#verdictSub').textContent = sub;
+  $('#statBase').textContent = '25%';
+
+  // 分类
+  const byCat = {};
+  pairs.forEach(({q,picked})=>{
+    const c = q.k;
+    byCat[c] = byCat[c] || {n:0,r:0};
+    byCat[c].n++;
+    if(LETTERS[picked]===q.a) byCat[c].r++;
+  });
+  const cats = Object.entries(byCat).sort((a,b)=>b[1].n-a[1].n);
+  const list = $('#catList'); list.innerHTML='';
+  cats.forEach(([name,s])=>{
+    const p = Math.round(s.r/s.n*100);
+    const row = el('div','cat-row');
+    row.innerHTML = `<span class="nm">${name}</span><span class="bar"><i style="width:${p}%;background:${p>=50?'#2F6B57':'#B08A3E'}"></i></span><span class="num">${s.r}/${s.n} · ${p}%</span>`;
+    list.append(row);
+  });
+  $('#catNote').textContent = `${cats.length} 个类别`;
+
+  // 错题
+  const wrongs = pairs.filter(({q,picked})=>LETTERS[picked]!==q.a);
+  const rev = $('#reviewList'); rev.innerHTML='';
+  $('#revNote').textContent = wrongs.length ? `${wrongs.length} 题` : '';
+  if(!wrongs.length){
+    rev.innerHTML = '<div class="empty">这一局没有错题。</div>';
+  } else {
+    wrongs.forEach(({q,picked})=>{
+      const box = el('div','rev');
+      const meta = el('div','meta');
+      meta.append(el('span','tag year',`${q.y}`));
+      meta.append(el('span','tag cat',q.k));
+      box.append(meta);
+      box.append(el('div','revbirth', `命主 ${q.g.replace(/^\s*(男命|女命|乾造|坤造|坤命|男性|女性)\s*[：:，,、]?\s*/, '')}`));
+      box.append(el('div','q', `${q.q}`));
+      const ans = el('div','ans');
+      ans.innerHTML = `<span class="yours">你选 ${LETTERS[picked]}：${q.o[picked]}</span><span class="right">正确 ${q.a}：${q.o[LETTERS.indexOf(q.a)]}</span>`;
+      box.append(ans);
+      rev.append(box);
+    });
+  }
+
+  state.lastResult = {right,total,pct};
+}
+
+$('#againBtn').addEventListener('click', ()=>{
+  $('#result').classList.add('hidden');
+  $('#setup').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'instant'});
+});
+
+$('#copyBtn').addEventListener('click', async ()=>{
+  const r = state.lastResult || {right:0,total:0,pct:0};
+  const txt = `命理题库自测：${r.total} 题答对 ${r.right} 题，正确率 ${r.pct}%（随机基线 25%）`;
+  try{
+    await navigator.clipboard.writeText(txt);
+    toast('已复制成绩');
+  }catch(e){
+    const ta = document.createElement('textarea'); ta.value = txt; document.body.append(ta);
+    ta.select(); document.execCommand('copy'); ta.remove(); toast('已复制成绩');
+  }
+});
+
+let toastTimer;
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
+/* ---------------- 排盘折叠 ---------------- */
+$('#chartBox').addEventListener('toggle', e => {
+  $('#chartToggle').textContent = e.target.open ? '收起' : '展开';
+});
+
+/* ---------------- 键盘 ---------------- */
+document.addEventListener('keydown', e=>{
+  if($('#quiz').classList.contains('hidden')) return;
+  if(['1','2','3','4'].includes(e.key)){ const i=+e.key-1; if(i<state.queue[state.idx].o.length) choose(i); }
+  if(['a','b','c','d','A','B','C','D'].includes(e.key)){ const i=LETTERS.indexOf(e.key.toUpperCase()); if(i<state.queue[state.idx].o.length) choose(i); }
+  if(e.key==='Enter' && !$('#nextBtn').disabled) $('#nextBtn').click();
+});
+</script>
+</body>
+</html>
